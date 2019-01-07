@@ -85,13 +85,9 @@ class Post(Document):
 
 
 
-class File(Base):
-    " A file is an image,video etc addable to documents"
+class File(Content):
+    " A file is an image,video etc. It adds filename to content"
     __tablename__ = 'files'
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, ForeignKey('contents.id'),primary_key=True)
     filename = Column(Unicode(255))
-    user_id = Column(Integer, ForeignKey('users.id'))
-    user = relationship("User", back_populates="files")
-    document_id = Column(Integer, ForeignKey('documents.id'))
-    document = relationship('Document', back_populates='files')
     

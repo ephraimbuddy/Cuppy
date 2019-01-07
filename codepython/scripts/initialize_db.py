@@ -6,7 +6,7 @@ from pyramid.paster import bootstrap, setup_logging
 from sqlalchemy.exc import OperationalError
 
 from ..models.nav import Nav
-from ..models.blog import Category, Document
+from ..models.content import Category, Document
 
 log = logging.getLogger(__name__)
 
