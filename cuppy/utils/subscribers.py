@@ -1,5 +1,5 @@
 __author__ = 'ephraim'
-from codepython.utils import helpers
+from cuppy.utils import helpers
 from pyramid.httpexceptions import HTTPForbidden
 
 

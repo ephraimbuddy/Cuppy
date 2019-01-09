@@ -1,4 +1,4 @@
-from codepython.forms import BaseForm, strip_filter
+from cuppy.forms import BaseForm, strip_filter
 from wtforms import StringField, PasswordField ,validators, ValidationError, FileField, TextAreaField
 
 

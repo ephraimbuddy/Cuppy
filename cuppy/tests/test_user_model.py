@@ -34,7 +34,7 @@ class TestCheckPassword(BaseTest):
 class TestAuthUserLog(BaseTest):
 
     def test_AddUserLog(self):
-        from codepython.models.users import AuthUserLog
+        from cuppy.models.users import AuthUserLog
         from sqlalchemy.sql import func
         user = self.makeUser(username="ephraim", email='example@example.com')
         user.set_password('secret')
@@ -49,7 +49,7 @@ class TestAuthUserLog(BaseTest):
 class TestActivityLog(BaseTest):
 
     def test_userActivity(self):
-        from codepython.models.users import UserActivity
+        from cuppy.models.users import UserActivity
         from sqlalchemy.sql import func
         user = self.makeUser(username="ephraim", email='example@example.com')
         user.set_password('secret')

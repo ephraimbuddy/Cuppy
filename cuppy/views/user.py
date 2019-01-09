@@ -1,9 +1,9 @@
 from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPFound
-from codepython.forms.userform import SignupForm
-from codepython.models.users import User
-from codepython.utils.util import buddy_remember, generate_confirmation_token
-from codepython.mailing.account import user_regmail
+from cuppy.forms.userform import SignupForm
+from cuppy.models.users import User
+from cuppy.utils.util import buddy_remember, generate_confirmation_token
+from cuppy.mailing.account import user_regmail
 
 @view_config(route_name="signup", renderer="buddy:templates/derived/account/signup.mako")
 def signup(request):

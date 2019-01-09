@@ -1,7 +1,7 @@
 from itsdangerous import URLSafeTimedSerializer
 from pyramid.settings import asbool
 from pyramid.util import DottedNameResolver
-from codepython.models.users import AuthUserLog
+from cuppy.models.users import AuthUserLog
 from pyramid.threadlocal import get_current_registry
 from pyramid.security import remember
 

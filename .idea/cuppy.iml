@@ -9,7 +9,7 @@
     <option name="TEMPLATE_CONFIGURATION" value="Chameleon" />
     <option name="TEMPLATE_FOLDERS">
       <list>
-        <option value="$MODULE_DIR$/codepython/templates" />
+        <option value="$MODULE_DIR$/../codepython/codepython/templates" />
       </list>
     </option>
   </component>

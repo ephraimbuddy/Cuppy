@@ -38,9 +38,9 @@ tests_require = [
 ]
 
 setup(
-    name='codepython',
+    name='cuppy',
     version='0.1',
-    description='codepython',
+    description='cuppy',
     long_description=README + '\n\n' + CHANGES,
     classifiers=[
         'Programming Language :: Python',
@@ -61,10 +61,10 @@ setup(
     install_requires=requires,
     entry_points={
         'paste.app_factory': [
-            'main = codepython:main',
+            'main = cuppy:main',
         ],
         'console_scripts': [
-            'initialize_codepython_db=codepython.scripts.initialize_db:main',
+            'initialize_codepython_db=cuppy.scripts.initialize_db:main',
         ],
     },
 )

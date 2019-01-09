@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/codepython.iml" filepath="$PROJECT_DIR$/.idea/codepython.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../cuppy/.idea/cuppy.iml" filepath="$PROJECT_DIR$/../cuppy/.idea/cuppy.iml" />
     </modules>
   </component>
 </project>

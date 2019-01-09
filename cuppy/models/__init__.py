@@ -54,7 +54,7 @@ def includeme(config):
     """
     Initialize the model for a Pyramid app.
 
-    Activate this setup using ``config.include('codepython.models')``.
+    Activate this setup using ``config.include('cuppy.models')``.
 
     """
     settings = config.get_settings()

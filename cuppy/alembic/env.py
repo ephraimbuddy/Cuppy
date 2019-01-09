@@ -3,7 +3,7 @@ from alembic import context
 from pyramid.paster import get_appsettings, setup_logging
 from sqlalchemy import engine_from_config
 
-from codepython.models.meta import Base
+from cuppy.models.meta import Base
 
 config = context.config
 

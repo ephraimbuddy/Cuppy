@@ -1,8 +1,8 @@
 from pyramid.view import view_config
-from codepython.models.content import Document
+from cuppy.models.content import Document
 
 
-@view_config(route_name="view_doc",renderer="codepython:templates/derived/document/view.mako")
+@view_config(route_name="view_doc",renderer="cuppy:templates/derived/document/view.mako")
 def doc_view(request):
     document = request.context.document
     #document = Document.get_by_id(id)
@@ -15,10 +15,10 @@ class DocumentView(object):
         self.request = request
         self.session = request.session
 
-    @view_config(route_name="add_doc", renderer="codepython:templates/derived/document/add.mako")
+    @view_config(route_name="add_doc", renderer="cuppy:templates/derived/document/add.mako")
     def add(self):
         pass
     
-    @view_config(route_name="edit_doc", renderer="codepython:templates/derived/document/edit.mako")
+    @view_config(route_name="edit_doc", renderer="cuppy:templates/derived/document/edit.mako")
     def edit(self):
         pass

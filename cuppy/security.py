@@ -1,8 +1,8 @@
 from pyramid.authentication import AuthTktAuthenticationPolicy
 from pyramid.authorization import ACLAuthorizationPolicy
 from pyramid.events import BeforeRender
-from codepython.models.users import User, RootFactory
-from codepython.utils.subscribers import add_renderer_globals
+from cuppy.models.users import User, RootFactory
+from cuppy.utils.subscribers import add_renderer_globals
 
 
 class MyAuthenticationPolicy(AuthTktAuthenticationPolicy):
