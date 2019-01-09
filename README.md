@@ -1,9 +1,6 @@
 # cuppy
 A simple python CMS powered by pyramid framework
 
-cuppy
-==========
-
 Getting Started
 ---------------
 
