@@ -1,8 +1,17 @@
-from sqlalchemy import (Table, Column, Integer, Unicode,
- UnicodeText, func, ForeignKey, DateTime, Boolean)
-from sqlalchemy.orm import relationship, selectinload
+from sqlalchemy import Table
+from sqlalchemy import Column
+from sqlalchemy import Integer
+from sqlalchemy import Unicode
+from sqlalchemy import UnicodeText
+from sqlalchemy import func
+from sqlalchemy import ForeignKey
+from sqlalchemy import DateTime
+from sqlalchemy import Boolean
+from sqlalchemy.orm import relationship
+from sqlalchemy.orm import selectinload
 
-from .meta import Base, DBSession
+from .meta import Base
+from .meta import DBSession
 from .nav import Nav
 
 
@@ -38,12 +47,15 @@ class Content(Nav):
         'polymorphic_identity':'content'
     }
 
+    @classmethod
+    def get_by_id(cls,id):
+        return DBSession.query(cls).filter_by(id=id).first()
+
 class Document(Content):
-    " Document adds body and files to content"
+    " Document adds body to content"
     __tablename__ = 'documents'
     id = Column(Integer, ForeignKey('contents.id'), primary_key=True)
     body = Column(UnicodeText)
-    files = relationship("File", back_populates='document', cascade="all, delete, delete-orphan")
     
     __mapper_args__ = {
         'polymorphic_identity':'document'
@@ -90,4 +102,7 @@ class File(Content):
     __tablename__ = 'files'
     id = Column(Integer, ForeignKey('contents.id'),primary_key=True)
     filename = Column(Unicode(255))
+    
+
+
     

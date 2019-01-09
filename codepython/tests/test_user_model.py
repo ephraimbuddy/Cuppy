@@ -1,4 +1,4 @@
-from codepython.tests import BaseTest
+from . import BaseTest
 
 
 class TestSetPassword(BaseTest):
