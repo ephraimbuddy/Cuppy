@@ -14,6 +14,9 @@
   <component name="FileEditorManager">
     <leaf />
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
@@ -27,34 +30,24 @@
     <option name="width" value="1221" />
     <option name="height" value="600" />
   </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
             <path>
-              <item name="codepython" type="b2602c69:ProjectViewProjectNode" />
-              <item name="codepython" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="codepython" type="b2602c69:ProjectViewProjectNode" />
-              <item name="codepython" type="462c0819:PsiDirectoryNode" />
-              <item name="codepython" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="codepython" type="b2602c69:ProjectViewProjectNode" />
-              <item name="codepython" type="462c0819:PsiDirectoryNode" />
-              <item name="codepython" type="462c0819:PsiDirectoryNode" />
-              <item name="models" type="462c0819:PsiDirectoryNode" />
+              <item name="cuppy" type="b2602c69:ProjectViewProjectNode" />
+              <item name="cuppy" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -244,11 +237,11 @@
   <component name="ToolWindowManager">
     <frame x="0" y="25" width="1366" height="704" extended-state="6" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25757575" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25688756" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32869565" />
       <window_info anchor="bottom" id="Run" order="2" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
@@ -271,26 +264,18 @@
     <option name="version" value="1" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/.gitignore">
+    <entry file="file://$PROJECT_DIR$/../cuppy/.gitignore">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/codepython/pshell.py">
+    <entry file="file://$PROJECT_DIR$/../cuppy/cuppy/pshell.py">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/codepython/tests.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-555">
-          <folding>
-            <element signature="e#0#15#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/codepython/routes.py">
+    <entry file="file://$PROJECT_DIR$/codepython/tests.py" />
+    <entry file="file://$PROJECT_DIR$/../cuppy/cuppy/routes.py">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/codepython/models/mymodel.py" />
-    <entry file="file://$PROJECT_DIR$/codepython/models/meta.py">
+    <entry file="file://$PROJECT_DIR$/../cuppy/cuppy/models/meta.py">
       <provider selected="true" editor-type-id="text-editor">
         <state>
           <folding>
@@ -299,7 +284,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/codepython/__init__.py">
+    <entry file="file://$PROJECT_DIR$/../cuppy/cuppy/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
         <state>
           <caret column="35" selection-start-column="35" selection-end-column="35" />

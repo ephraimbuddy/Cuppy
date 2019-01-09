@@ -1,4 +1,4 @@
-codepython
+cuppy
 ==========
 
 Getting Started
@@ -6,7 +6,7 @@ Getting Started
 
 - Change directory into your newly created project.
 
-    cd codepython
+    cd cuppy
 
 - Create a Python virtual environment.
 
@@ -32,7 +32,7 @@ Getting Started
 
 - Load default data into the database using a script.
 
-    env/bin/initialize_codepython_db development.ini
+    env/bin/initialize_cuppy_db development.ini
 
 - Run your project's tests.
 
