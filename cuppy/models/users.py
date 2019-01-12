@@ -46,7 +46,7 @@ class User(Base):
     contents = relationship('Content', back_populates="user")
     files = relationship("File", back_populates='user', cascade="all, delete, delete-orphan")
     user_log = relationship('AuthUserLog', back_populates='user', cascade='all, delete, delete-orphan')
-    activities = relationship('UserActivity', back_populates='user')
+    activities = relationship('SiteActivity', back_populates='user')
   
     def set_password(self, pw):
         pwhash = bcrypt.hashpw(pw.encode('utf8'), bcrypt.gensalt())
@@ -96,8 +96,8 @@ class AuthUserLog(Base):
     event = Column(Enum(u'L',u'R',u'P',u'F', name=u'event'), default=u'L')
 
 
-class UserActivity(Base):
-    """ Records every activity by user
+class SiteActivity(Base):
+    """ Records every activity on the site by user
     :
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey("users.id"), index=True)
@@ -105,7 +105,7 @@ class UserActivity(Base):
     description = Column(Unicode(100))
     time = Column(DateTime, default=func.now())
     """
-    __tablename__ = 'user_activity'
+    __tablename__ = 'site_activity'
 
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey("users.id"), index=True)
@@ -114,49 +114,8 @@ class UserActivity(Base):
     time = Column(DateTime, default=func.now())
 
 
-class RootFactory(Base):
-    """ Defines the ACLs,
-    """
-    __tablename__ = 'root'
-    id = Column(Integer, primary_key=True)
-
-    def __init__(self, request):
-        if request.matchdict:
-            self.__dict__.update(request.matchdict)
-
-    @property
-    def __acl__(self):
-
-        defaultlist = [(Allow, Everyone, 'view'),
-               (Allow, Authenticated, 'post'),
-               (Allow, 'superadmin', ALL_PERMISSIONS), ]
-
-        return defaultlist
 
 
-class UserFactory(Base):
-    __tablename__ = 'user_factory'
-    id = Column(Integer, primary_key=True)
-
-    __acl__ = [
-                (Allow, Authenticated, 'post'),
-                (Allow,'superadmin',ALL_PERMISSIONS),
-                (Allow, 'admin',('admin','supermod','mod','edit')),
-                (Allow, 'supermod',('supermod','mod')),
-                (Allow, 'mod','mod')
-        ]
-
-    def __init__(self, request):
-        if request.matchdict:
-            self.__dict__.update(request.matchdict)
-
-    def __getitem__(self, key):
-        user = User.get_by_username(key)
-        if not user:
-            return
-        user.__parent__ = self
-        user.__name__ = key
-        return user
     
 
 

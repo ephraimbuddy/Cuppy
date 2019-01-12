@@ -48,12 +48,12 @@ class TestAuthUserLog(BaseTest):
 
 class TestActivityLog(BaseTest):
 
-    def test_userActivity(self):
-        from cuppy.models.users import UserActivity
+    def test_siteActivity(self):
+        from cuppy.models.users import SiteActivity
         from sqlalchemy.sql import func
         user = self.makeUser(username="ephraim", email='example@example.com')
         user.set_password('secret')
-        ac = UserActivity(
+        ac = SiteActivity(
             user=user,
             description="Added a user",
             time=func.now()

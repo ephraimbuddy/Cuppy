@@ -8,6 +8,7 @@ from sqlalchemy.exc import OperationalError
 from ..models.meta import Base
 from ..models.nav import Nav
 from ..models.content import Category, Document
+from ..models.users import User
 
 log = logging.getLogger(__name__)
 
@@ -16,12 +17,23 @@ def setup_models(dbsession):
     """
     Add or update models / fixtures in the database.
 
+    TODO: Run fixtures and create admin user using config_uri
     """
     log.debug("Adding user ...")
+    user = User(
+        first_name="Ephraim",
+        last_name="Anierobi",
+        username = "admin",
+        email="admin@example.com",
+    )
+    dbsession.add(user)
+    user.set_password("admin")
+
     log.debug("Creating the index navigation")
     home = Document(name='', slug='', body="This is the home page")
     dbsession.add(home)
     dbsession.flush()
+
     log.debug('Creating Categories ...')
     category1 = Category(
         name="pyramid"

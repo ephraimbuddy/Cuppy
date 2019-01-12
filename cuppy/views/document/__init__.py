@@ -4,6 +4,7 @@ from pyramid.security import ALL_PERMISSIONS
 from pyramid.httpexceptions import HTTPNotFound
 
 from ...models.content import Document
+from ...security import SITE_ACL
 
 def includeme(config):
     
@@ -31,11 +32,11 @@ class DocumentResource(object):
        self.document = document
 
     def __acl__(self):
-
-        return [(Allow, Authenticated, 'post'),
-                (Allow,'superadmin',ALL_PERMISSIONS),
-                (Allow, 'admin',('admin','supermod','mod','edit')),
-                (Allow, 'supermod',('supermod','mod')),
-                (Allow, 'mod','mod')]
+        acl = SITE_ACL
+        acl.append((Allow, str(self.document.user.id),('edit','state_change')))
+        return acl
+    
+  
+        
 
     
