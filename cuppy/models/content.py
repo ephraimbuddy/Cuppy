@@ -32,7 +32,6 @@ class Content(Nav):
 
     __tablename__ = "contents"
     id= Column(Integer, ForeignKey('navs.id'), primary_key=True)
-    title = Column(Unicode(255))
     # Description is used for summarizing the content. Appears after title in a document
     description = Column(UnicodeText)
     published = Column(Boolean(name="published"), default=True)
@@ -50,6 +49,11 @@ class Content(Nav):
     @classmethod
     def get_by_id(cls,id):
         return DBSession.query(cls).filter_by(id=id).first()
+    
+    @classmethod
+    def get_by_name(cls,name):
+        return DBSession.query(cls).filter_by(name=name).first()
+        
 
 class Document(Content):
     " Document adds body to content"
@@ -60,6 +64,21 @@ class Document(Content):
     __mapper_args__ = {
         'polymorphic_identity':'document'
     }
+
+    def get_slug(self):
+
+        "Build slugs from parents"
+
+        slug = super(Document,self).get_slug()
+        if self.parent is not None:
+            return "%s/%s" % (self.parent.slug, slug)
+        return slug
+
+    def set_slug(self):
+        pass
+    
+    def set_parent(self):
+        pass
 
 
 

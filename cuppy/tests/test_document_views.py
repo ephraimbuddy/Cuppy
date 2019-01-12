@@ -7,8 +7,8 @@ from . import dummy_request
 class TestDocumentViewSuccess(BaseTest):
 
     def _callFUT(self, request):
-        from ..views.document.views import doc_view
-        return doc_view(request)
+        from ..views.document.views import DocumentView
+        return DocumentView.doc_view(request)
     
     def test_view(self):
         from ..views.document import DocumentResource

@@ -64,7 +64,7 @@ setup(
             'main = cuppy:main',
         ],
         'console_scripts': [
-            'initialize_codepython_db=cuppy.scripts.initialize_db:main',
+            'initialize_cuppy_db=cuppy.scripts.initialize_db:main',
         ],
     },
 )

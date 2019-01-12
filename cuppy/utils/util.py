@@ -6,23 +6,21 @@ from pyramid.threadlocal import get_current_registry
 from pyramid.security import remember
 
 
-def buddy_settings(key=None, default=None):
-    """ Gets a buddy setting if the key is set.
-        If no key is set, returns all the buddy settings.
+def cuppy_settings(key=None, default=None):
+    """ Gets a cuppy setting if the key is set.
+        If no key is set, returns all the cuppy settings.
 
-        Some settings have issue with a Nonetype value error,
-        you can set the default to fix this issue.
     """
     settings = get_current_registry().settings
 
     if key:
-        return settings.get('buddy.%s' % key, default)
+        return settings.get('cuppy.%s' % key, default)
     else:
-        buddy_settings = []
+        cuppy_settings = []
         for k, v in settings.items():
-            if k.startswith('buddy.'):
-                buddy_settings.append({k.split('.')[1]: v})
-        return buddy_settings
+            if k.startswith('cuppy.'):
+                cuppy_settings.append({k.split('.')[1]: v})
+        return cuppy_settings
 
 
 def get_module(package):
@@ -32,11 +30,11 @@ def get_module(package):
     return resolver.resolve(package)
 
 
-def buddy_remember(request, user, event='L'):
-    if asbool(buddy_settings('log_logins')):
-        if buddy_settings('log_login_header'):
-            ip_addr = request.environ.get(buddy_settings('log_login_header'),
-                                          u'invalid value - buddy.log_login_header')
+def cuppy_remember(request, user, event='L'):
+    if asbool(cuppy_settings('log_logins')):
+        if cuppy_settings('log_login_header'):
+            ip_addr = request.environ.get(cuppy_settings('log_login_header'),
+                                          u'invalid value - cuppy.log_login_header')
         else:
             ip_addr = request.client_addr
         record = AuthUserLog(user_id=user.id,
@@ -48,16 +46,19 @@ def buddy_remember(request, user, event='L'):
     return remember(request, user.id)
 
 def generate_confirmation_token(email):
-    serializer = URLSafeTimedSerializer(buddy_settings('email_secret'))
-    return serializer.dumps(email, salt=buddy_settings('email_secret_password'))
+    serializer = URLSafeTimedSerializer(cuppy_settings('email_secret'))
+    return serializer.dumps(email, salt=cuppy_settings('email_secret_password'))
 
 
 def confirm_token(token, expiration=86400):
-    serializer = URLSafeTimedSerializer(buddy_settings('email_secret'))
+    serializer = URLSafeTimedSerializer(cuppy_settings('email_secret'))
+    ex= cuppy_settings("confirm_token_expiration")
+    if ex:
+        expiration = ex
     try:
         email = serializer.loads(
             token,
-            salt=buddy_settings('email_secret_password'),
+            salt=cuppy_settings('email_secret_password'),
             max_age=expiration
         )
     except:

@@ -2,7 +2,7 @@ from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPFound
 from cuppy.forms.userform import SignupForm
 from cuppy.models.users import User
-from cuppy.utils.util import buddy_remember, generate_confirmation_token
+from cuppy.utils.util import cuppy_remember, generate_confirmation_token
 from cuppy.mailing.account import user_regmail
 
 @view_config(route_name="signup", renderer="buddy:templates/derived/account/signup.mako")
@@ -24,7 +24,7 @@ def signup(request):
                     )
         user.set_password(form.password.data)
         request.dbsession.add(user)
-        headers = buddy_remember(request, user, event='R')
+        headers = cuppy_remember(request, user, event='R')
         token = generate_confirmation_token(user.email)
         user_regmail(request, user, user.email, token)
         

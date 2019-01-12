@@ -5,6 +5,7 @@ import logging
 from pyramid.paster import bootstrap, setup_logging
 from sqlalchemy.exc import OperationalError
 
+from ..models.meta import Base
 from ..models.nav import Nav
 from ..models.content import Category, Document
 
@@ -18,31 +19,29 @@ def setup_models(dbsession):
     """
     log.debug("Adding user ...")
     log.debug("Creating the index navigation")
-    home = Nav(name='Home', path='')
+    home = Document(name='', slug='', body="This is the home page")
     dbsession.add(home)
     dbsession.flush()
     log.debug('Creating Categories ...')
     category1 = Category(
-        name="pyramid",
-        path='pyramid',
+        name="pyramid"
     )
     dbsession.add(category1)
     dbsession.flush()
-    category2 = Category(name="Django", path="django",before=category1.id)
+    category2 = Category(name="Django")
     dbsession.add(category2)
     dbsession.flush()
     log.debug("creating documents ...")
     contact=Document(name = "Contact us",
                     body = "Contact us page",
-                    path='contact',
+                    slug='contact',
                     parent_id = home.id)
     dbsession.add(contact)
     dbsession.flush()
     projects = Document(name='projects',
-                        path = 'projects',
+                        slug = 'projects',
                         body="My projects",
-                        parent_id=home.id,
-                        before=contact.id)
+                        parent_id=home.id)
     dbsession.add(projects)
     dbsession.flush()
     

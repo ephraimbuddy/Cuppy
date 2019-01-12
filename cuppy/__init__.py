@@ -9,6 +9,6 @@ def main(global_config, **settings):
         config.include('pyramid_mako')
         config.include('.routes')
         config.include('.security')
-        config.include('.views.document', route_prefix="document")
+        config.include('.views.document')
         config.scan()
     return config.make_wsgi_app()

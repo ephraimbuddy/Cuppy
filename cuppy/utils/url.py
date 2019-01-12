@@ -1,6 +1,7 @@
 import re
 
 # Define and compile static regexes
+
 from unidecode import unidecode
 
 FILENAME_REGEX = re.compile(r"^(.+)\.(\w{,4})$", re.U)
@@ -70,30 +71,9 @@ def disambiguate_name(name):
     return '-'.join(parts)
 
 
-def title_to_name(title, blacklist=()):
-    
-    name = url_normalizer(title, locale='en', max_length=100)
-    while name in blacklist:
+def title_to_name(title, query_set=(), max_length=200):
+    query_set = [i.lower() for i in query_set]
+    name = url_normalizer(title, locale='en', max_length=max_length)
+    while name in query_set:
         name = disambiguate_name(name)
     return name
-
-def urlify_name(title):
-    blacklist = ()
-    return title_to_name(title,blacklist)
-
-
-def camel_case_to_name(text):
-    """
-      >>> camel_case_to_name('FooBar')
-      'foo_bar'
-      >>> camel_case_to_name('TXTFile')
-      'txt_file'
-      >>> camel_case_to_name ('MyTXTFile')
-      'my_txt_file'
-      >>> camel_case_to_name('froBOZ')
-      'fro_boz'
-      >>> camel_case_to_name('f')
-      'f'
-    """
-    return re.sub(
-        r'((?<=[a-z])[A-Z]|(?<!\A)[A-Z](?=[a-z]))', r'_\1', text).lower()
