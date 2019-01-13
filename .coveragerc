@@ -1,3 +1,3 @@
 [run]
-source = codepython
-omit = codepython/test*
+source = cuppy
+omit = cuppy/test*

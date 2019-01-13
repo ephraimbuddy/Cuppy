@@ -51,7 +51,7 @@ setup(
     author='',
     author_email='',
     url='',
-    keywords='cuppy framework web pyramid pylons',
+    keywords='cuppy CMS framework web pyramid pylons',
     packages=find_packages(),
     include_package_data=True,
     zip_safe=False,

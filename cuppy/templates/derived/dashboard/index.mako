@@ -1,0 +1,1 @@
+<%inherit file="cuppy:templates/base/dashboard-base.mako"/>
