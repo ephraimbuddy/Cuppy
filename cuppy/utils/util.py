@@ -1,27 +1,103 @@
 from itsdangerous import URLSafeTimedSerializer
+import re
+from unidecode import unidecode
+
 from pyramid.settings import asbool
 from pyramid.util import DottedNameResolver
-from cuppy.models.users import AuthUserLog
 from pyramid.threadlocal import get_current_registry
 from pyramid.security import remember
 
 
-def cuppy_settings(key=None, default=None):
-    """ Gets a cuppy setting if the key is set.
-        If no key is set, returns all the cuppy settings.
+# Define and compile static regexes
+# The below codes are partly from Kotti CMS
 
-    """
-    settings = get_current_registry().settings
 
-    if key:
-        return settings.get('cuppy.%s' % key, default)
+FILENAME_REGEX = re.compile(r"^(.+)\.(\w{,4})$", re.U)
+IGNORE_REGEX = re.compile(r"['\"]", re.U)
+URL_DANGEROUS_CHARS_REGEX = re.compile(r"[!#$%&()*+,/:;<=>?@\\^{|}\[\]~`]+", re.U)
+MULTIPLE_DASHES_REGEX = re.compile(r"\-+", re.U)
+EXTRA_DASHES_REGEX = re.compile(r"(^\-+)|(\-+$)", re.U)
+# Define static constraints
+MAX_LENGTH = 200
+MAX_URL_LENGTH = 50
+
+
+def crop_name(base, maxLength=MAX_LENGTH):
+    baseLength = len(base)
+
+    index = baseLength
+    while index > maxLength:
+        index = base.rfind('-', 0, index)
+
+    if index == -1 and baseLength > maxLength:
+        base = base[:maxLength]
+
+    elif index > 0:
+        base = base[:index]
+
+    return base
+
+
+def url_normalizer(text, locale=None, max_length=MAX_URL_LENGTH):
+
+    text = unidecode(text)
+
+    # lowercase text
+    base = text.lower()
+    ext = ''
+
+    m = FILENAME_REGEX.match(base)
+    if m is not None:
+        base = m.groups()[0]
+        ext = m.groups()[1]
+
+    base = base.replace(' ', '-')
+    base = IGNORE_REGEX.sub('', base)
+    base = URL_DANGEROUS_CHARS_REGEX.sub('-', base)
+    base = EXTRA_DASHES_REGEX.sub('', base)
+    base = MULTIPLE_DASHES_REGEX.sub('-', base)
+
+
+    base = crop_name(base, maxLength=max_length)
+
+    if ext != '':
+        base = base + '.' + ext
+    return base
+
+def disambiguate_name(name):
+    parts = name.split('-')
+    if len(parts) > 1:
+        try:
+            index = int(parts[-1])
+        except ValueError:
+            parts.append('1')
+        else:
+            parts[-1] = ""+(index + 1)
+
     else:
-        cuppy_settings = []
-        for k, v in settings.items():
-            if k.startswith('cuppy.'):
-                cuppy_settings.append({k.split('.')[1]: v})
-        return cuppy_settings
+        parts.append('1')
+    return '-'.join(parts)
 
+
+def title_to_name(title, blacklist=(), max_length=200):
+    query_set = [i.lower() for i in blacklist]
+    normalizer = cuppy_settings('url_normalizer')[0]
+    name = urlNormalizer(title, locale='en', max_length=max_length)
+    while name in blacklist:
+        name = disambiguate_name(name)
+    return name
+
+
+def get_settings():
+    return get_current_registry().settings
+
+def cuppy_settings(key):
+    """ Gets a cuppy setting if the key is set 
+    """
+    settings = get_settings()
+
+    return settings.get('cuppy.%s' % key)
+    
 
 def get_module(package):
     """ Returns a module based on the string passed
@@ -29,21 +105,6 @@ def get_module(package):
     resolver = DottedNameResolver(package.split('.', 1)[0])
     return resolver.resolve(package)
 
-
-def cuppy_remember(request, user, event='L'):
-    if asbool(cuppy_settings('log_logins')):
-        if cuppy_settings('log_login_header'):
-            ip_addr = request.environ.get(cuppy_settings('log_login_header'),
-                                          u'invalid value - cuppy.log_login_header')
-        else:
-            ip_addr = request.client_addr
-        record = AuthUserLog(user_id=user.id,
-                             ip_addr=ip_addr,
-                             event=event)
-        request.dbsession.add(record)
-        request.dbsession.flush()
-        return remember(request, user.id)
-    return remember(request, user.id)
 
 def generate_confirmation_token(email):
     serializer = URLSafeTimedSerializer(cuppy_settings('email_secret'))
@@ -64,3 +125,45 @@ def confirm_token(token, expiration=86400):
     except:
         return False
     return email
+
+
+core_css = ['bootstrap','fontawesome', 'adminlte']
+
+
+class StaticResource(object):
+    """ A class to enable addition of static resources to project"""
+    def __init__(self, resources:list=None, css:bool=True):
+        
+        self.is_css = css
+
+        if not resources:
+            resources =[]
+        if not isinstance(resources, list):
+            raise ValueError("resources must be a list of strings or a list of StaticResource object")
+        self.resources = []
+        self.css_resources =[]
+        self.js_resources = []
+        for resource in resources:
+            self.add(resource)
+
+    def add(self, resource):
+        if isinstance(resource,self.__class__):
+            self.resources.extend(resource.resources)
+        elif isinstance(resource,str):
+            if self.is_css:
+                #deal with css files
+                if asbool(cuppy_settings('minified_css')):
+                    self.css_resources.append('.'.join([resource,'min','css']))
+                    self.resources.append('.'.join([resource,'min','css']))
+                else:
+                    self.css_resources.append('.'.join([resource,'min','css']))
+                    self.resources.append('.'.join([resource,'css']))
+            else:
+                if asbool(cuppy_settings('minified_js')):
+                    self.js_resources.append('.'.join([resource,'min','js']))
+                    self.resources.append('.'.join([resource,'min','js']))
+                else:
+                    self.js_resources.append('.'.join([resource,'min','js']))
+                    self.resources.append('.'.join([resource,'js']))
+        else:
+            raise ValueError("resource must be of type string or  StaticResource Object")

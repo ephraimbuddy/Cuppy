@@ -1,18 +1,70 @@
 from pyramid.config import Configurator
-
+from cuppy.utils.util import get_module
 
 def main(global_config, **settings):
     """ This function returns a Pyramid WSGI application.
     """
-    with Configurator(settings=settings) as config:
-        config.include('.models')
-        config.include('pyramid_mako')
-        config.include('.security')
+    
+    config = default_config(global_config, **settings)
+    config.include('.models')
+    
+    config.include('.security')
 
-        # routes
-        config.include('.routes')
-        config.include('.views.dashboard', route_prefix="dashboard")
-        config.include('.views.document')
-        
-        config.scan()
+    # routes
+    config.include('.routes')
+    config.include('.views.dashboard', route_prefix="dashboard")
+    config.include('.views.document')
+    
+    config.scan()
     return config.make_wsgi_app()
+
+
+default_settings = {
+        'cuppy.url_normalizer':'cuppy.utils.util.url_normalizer',
+        'cuppy.timezone':'Africa/Lagos',
+        'cuppy.csrf_secret':b'bjuiewbju43/s',
+        'cuppy.csrf_class':'cuppy.forms.csrf_class',
+        'cuppy.csrf':True,
+        'cuppy.csrf_time_limit':20,
+        'cuppy.email_secret':"jkasdfg8349c4ewu7438fiu73",
+        'cuppy.email_secret_password':'skdsidud782387dsdhjdsd7dsds',
+        'cuppy.confirm_token_expiration':86400,
+        'cuppy.minified_css':True,
+        'cuppy.minified_js':True,
+    }
+
+conf_dotted = {
+    'cuppy.url_normalizer',
+    'cuppy.csrf_class'
+}
+
+def _resolve_dotted(d,keys=conf_dotted):
+    resolved = d.copy()
+    for key in conf_dotted:
+        value = resolved[key]
+        if not isinstance(value, str):
+            continue
+        new_value = []
+        for name in value.split():
+            new_value.append(get_module(name))
+        resolved[key] = new_value
+    return resolved
+
+def default_config(global_config, **settings):
+    
+    for key, value in default_settings.items():
+        settings.setdefault(key, value)
+    for key, value in settings.items():
+        if key.startswith("cuppy") and isinstance(value, bytes):
+            settings[key] = value.decode("utf8")
+    
+    settings = _resolve_dotted(settings)
+    config = Configurator(settings=settings)
+    config.begin()
+    config.include('pyramid_mako')
+    config.commit()
+    
+        
+   
+
+    return config

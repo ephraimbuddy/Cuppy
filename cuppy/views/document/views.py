@@ -1,7 +1,5 @@
 from pyramid.view import view_config
 from cuppy.models.content import Document
-import logging
-log = logging.getLogger(__name__)
 
 
 class DocumentView(object):

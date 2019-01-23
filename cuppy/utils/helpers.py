@@ -1,9 +1,17 @@
-from cuppy.forms.userform import SignupForm,AddProfilePicture
+import datetime
+
 from webhelpers2.html.tags import *
 from webhelpers2.text import *
 from webhelpers2.containers import *
-from pyramid.renderers import render
 from webhelpers2.html import literal
 from webhelpers2.date import time_ago_in_words
-from cuppy.utils.url import title_to_name
-import datetime
+
+from pyramid.renderers import render
+
+from cuppy.forms.userform import SignupForm,AddProfilePicture
+
+
+
+
+
+

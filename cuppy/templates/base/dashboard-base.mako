@@ -4,27 +4,9 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>Cuppy CMS | Dashboard</title>
-  
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-  <!-- Bootstrap 3.3.7 -->
-  <link rel="stylesheet" href="${request.static_url('cuppy:static/bootstrap/css/bootstrap.min.css')}">
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="${request.static_url('cuppy:static/fontawesome/css/font-awesome.min.css')}">
   
-  <!-- Theme style -->
-  <link rel="stylesheet" href="${request.static_url('cuppy:static/adminlte/css/AdminLTE.min.css')}">
   
-  <link rel="stylesheet" href="${request.static_url('cuppy:static/adminlte/css/skin-blue-light.min.css')}">
-  
-  <!-- bootstrap wysihtml5 - text editor -->
-  <link rel="stylesheet" href="${request.static_url('cuppy:static/bootstrap/bootstrap3-wysihtml5.min.css')}">
-
-  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-  <!--[if lt IE 9]>
-  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-  <![endif]-->
 
   <!-- Google Font -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
@@ -180,20 +162,7 @@
 </div>
 <!-- ./wrapper -->
 
-<!-- jQuery 3 -->
-<script src="${request.static_url('cuppy:static/jquery/jquery.min.js')}"></script>
 
-<!-- Bootstrap 3.3.7 -->
-<script src="${request.static_url('cuppy:static/bootstrap/js/bootstrap.min.js')}"></script>
-
-<!-- Bootstrap WYSIHTML5 -->
-<script src="${request.static_url('cuppy:static/bootstrap/bootstrap3-wysihtml5.all.min.js')}"></script>
-<!-- Slimscroll -->
-<script src="${request.static_url('cuppy:static/jquery/jquery.slimscroll.min.js')}"></script>
-<!-- FastClick -->
-<script src="${request.static_url('cuppy:static/jquery/fastclick.js')}"></script>
-<!-- AdminLTE App -->
-<script src="${request.static_url('cuppy:static/adminlte/js/adminlte.min.js')}"></script>
 
 </body>
 </html>

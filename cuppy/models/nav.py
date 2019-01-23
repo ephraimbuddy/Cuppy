@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Unicode, Integer, ForeignKey, String
 from sqlalchemy.orm import relationship, backref
-from ..utils.url import title_to_name
+from ..utils.util import title_to_name
 from .meta import DBSession, Base
 
 

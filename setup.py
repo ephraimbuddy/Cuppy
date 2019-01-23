@@ -29,6 +29,8 @@ requires = [
     'webhelpers2',
     'unidecode',
     'pytz',
+    'js.adminlte',
+    'js.jquery_form',
 ]
 
 tests_require = [
@@ -66,5 +68,9 @@ setup(
         'console_scripts': [
             'initialize_cuppy_db=cuppy.scripts.initialize_db:main',
         ],
+        'fanstatic.libraries': [
+            'cuppy = cuppy.fanstatic:cuppylib'
+        ]
+        
     },
 )
