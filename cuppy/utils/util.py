@@ -1,6 +1,8 @@
 from itsdangerous import URLSafeTimedSerializer
 import re
 from unidecode import unidecode
+import os.path
+import os
 
 from pyramid.settings import asbool
 from pyramid.util import DottedNameResolver
@@ -82,7 +84,7 @@ def disambiguate_name(name):
 def title_to_name(title, blacklist=(), max_length=200):
     query_set = [i.lower() for i in blacklist]
     normalizer = cuppy_settings('url_normalizer')[0]
-    name = urlNormalizer(title, locale='en', max_length=max_length)
+    name = normalizer(title, locale='en', max_length=max_length)
     while name in blacklist:
         name = disambiguate_name(name)
     return name
@@ -167,3 +169,17 @@ class StaticResource(object):
                     self.resources.append('.'.join([resource,'js']))
         else:
             raise ValueError("resource must be of type string or  StaticResource Object")
+
+    def list_js_resources(self):
+        site_url = cuppy_settings('site_url')
+        search_path = cuppy_settings('static_path')
+        js = []
+        for root, dirnames, files in os.walk(search_path):
+            for file in self.js_resources:
+                if file in files:
+                    js.append(os.path.join(site_url,root,file))
+        return js
+
+
+
+    

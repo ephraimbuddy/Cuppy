@@ -6,10 +6,6 @@ def main(global_config, **settings):
     """
     
     config = default_config(global_config, **settings)
-    config.include('.models')
-    
-    config.include('.security')
-
     # routes
     config.include('.routes')
     config.include('.views.dashboard', route_prefix="dashboard")
@@ -31,6 +27,8 @@ default_settings = {
         'cuppy.confirm_token_expiration':86400,
         'cuppy.minified_css':True,
         'cuppy.minified_js':True,
+        'cuppy.static_path':'cuppy/static',
+        'cuppy.site_url':'https://www.nairabricks.com',
     }
 
 conf_dotted = {
@@ -59,12 +57,18 @@ def default_config(global_config, **settings):
             settings[key] = value.decode("utf8")
     
     settings = _resolve_dotted(settings)
-    config = Configurator(settings=settings)
-    config.begin()
-    config.include('pyramid_mako')
-    config.commit()
-    
-        
-   
+    with Configurator(settings=settings) as config:
+        #Include cuppy modules
+        for module in settings["cuppy.includes"]:
+            config.include(module)
+        pyramid_includes = config.registry.settings['pyramid.includes']
+        # Modules in 'pyramid.includes'  may
+        # override 'cuppy.includes':
+        if pyramid_includes:
+            for module in pyramid_includes.split():
+                config.include(module)
+        config.include('pyramid_mako')
+        config.include('.models')
+        config.include('.security')
 
     return config

@@ -5,19 +5,18 @@ from wtforms import StringField
 from wtforms import validators
 from wtforms import TextAreaField
 from wtforms import BooleanField
+from pyramid.settings import asbool
 
-from ..utils.util import get_module
 from ..utils.util import cuppy_settings
 
 strip_filter = lambda x: x.strip() if x else None
 
-
 class BaseForm(Form):
     class Meta:
-        csrf = cuppy_settings('csrf')
+        csrf = asbool(cuppy_settings('csrf'))
         csrf_class = cuppy_settings("csrf_class")[0]
         csrf_secret = cuppy_settings("csrf_secret")
-        csrf_time_limit = timedelta(minutes=cuppy_settings('csrf_time_limit'))
+        csrf_time_limit = timedelta(minutes=int(cuppy_settings('csrf_time_limit')))
 
     
 class ContentForm(BaseForm):
@@ -36,3 +35,4 @@ class ContentForm(BaseForm):
     published = BooleanField(default="checked")
 
     in_navigation = BooleanField(default="checked")
+
