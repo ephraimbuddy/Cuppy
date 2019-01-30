@@ -1,8 +1,8 @@
 """init
 
-Revision ID: d6658bc52b81
+Revision ID: a00248bfc96b
 Revises: 
-Create Date: 2019-01-13 23:24:53.984649
+Create Date: 2019-01-30 07:34:18.462390
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'd6658bc52b81'
+revision = 'a00248bfc96b'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -29,16 +29,15 @@ def upgrade():
     sa.Column('name', sa.Unicode(length=50), nullable=False),
     sa.PrimaryKeyConstraint('id', name=op.f('pk_categories'))
     )
-    op.create_table('navs',
+    op.create_table('site_root',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('name', sa.Unicode(length=250), nullable=False),
-    sa.Column('title', sa.Unicode(length=250), nullable=True),
+    sa.Column('meta_title', sa.Unicode(length=250), nullable=True),
+    sa.Column('description', sa.UnicodeText(), nullable=True),
     sa.Column('slug', sa.String(length=2000), nullable=False),
     sa.Column('parent_id', sa.Integer(), nullable=True),
     sa.Column('type', sa.String(length=50), nullable=False),
-    sa.ForeignKeyConstraint(['parent_id'], ['navs.id'], name=op.f('fk_navs_parent_id_navs')),
-    sa.PrimaryKeyConstraint('id', name=op.f('pk_navs')),
-    sa.UniqueConstraint('slug', name=op.f('uq_navs_slug'))
+    sa.ForeignKeyConstraint(['parent_id'], ['site_root.id'], name=op.f('fk_site_root_parent_id_site_root')),
+    sa.PrimaryKeyConstraint('id', name=op.f('pk_site_root'))
     )
     op.create_table('tags',
     sa.Column('id', sa.Integer(), nullable=False),
@@ -68,13 +67,13 @@ def upgrade():
     op.create_index(op.f('ix_auth_user_log_user_id'), 'auth_user_log', ['user_id'], unique=False)
     op.create_table('contents',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('description', sa.UnicodeText(), nullable=True),
-    sa.Column('published', sa.Boolean(name='published'), nullable=True),
+    sa.Column('title', sa.Unicode(length=255), nullable=True),
+    sa.Column('status', sa.Enum('draft', 'published', name='status'), nullable=True),
     sa.Column('creation_date', sa.DateTime(), nullable=True),
     sa.Column('modification_date', sa.DateTime(), nullable=True),
-    sa.Column('in_navigation', sa.Boolean(name='in_navigation'), nullable=True),
+    sa.Column('in_menu', sa.Boolean(name='in_menu'), nullable=True),
     sa.Column('user_id', sa.Integer(), nullable=True),
-    sa.ForeignKeyConstraint(['id'], ['navs.id'], name=op.f('fk_contents_id_navs')),
+    sa.ForeignKeyConstraint(['id'], ['site_root.id'], name=op.f('fk_contents_id_site_root')),
     sa.ForeignKeyConstraint(['user_id'], ['users.id'], name=op.f('fk_contents_user_id_users')),
     sa.PrimaryKeyConstraint('id', name=op.f('pk_contents'))
     )
@@ -137,7 +136,7 @@ def downgrade():
     op.drop_table('auth_user_log')
     op.drop_table('users')
     op.drop_table('tags')
-    op.drop_table('navs')
+    op.drop_table('site_root')
     op.drop_table('categories')
     op.drop_table('auth_groups')
     # ### end Alembic commands ###

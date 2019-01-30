@@ -44,7 +44,6 @@ class User(Base):
     about = Column(UnicodeText)
     mygroups = relationship("Groups", secondary=user_group, back_populates="users")
     contents = relationship('Content', back_populates="user")
-    files = relationship("File", back_populates='user', cascade="all, delete, delete-orphan")
     user_log = relationship('AuthUserLog', back_populates='user', cascade='all, delete, delete-orphan')
     activities = relationship('SiteActivity', back_populates='user')
   

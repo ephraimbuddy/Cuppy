@@ -31,6 +31,7 @@ requires = [
     'pytz',
     'js.adminlte',
     'js.jquery_form',
+    'pyramid_beaker'
 ]
 
 tests_require = [

@@ -52,9 +52,9 @@ class BaseTest(unittest.TestCase):
                     email=email)
         return user
 
-    def createDoc(self,  name, title, body, user):
+    def createDoc(self,  meta_title, title, body, user):
         from ..models.content import Document
-        doc = Document(name=name,
+        doc = Document(meta_title=meta_title,
                         title=title, 
                         body=title,
                         user=user)

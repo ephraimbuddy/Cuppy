@@ -15,7 +15,7 @@ class TestDocumentViewSuccess(BaseTest):
 
         user = self.makeUser("myusername","email@example.com","John")
         doc = self.createDoc(
-            name="MyDoc",
+            meta_title = "My Document meta title",
             title = "My Document title",
             body = "This is the body",
             user = user

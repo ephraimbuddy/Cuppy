@@ -1,6 +1,6 @@
 from pyramid.view import view_config
-from cuppy.models.content import Document
 
+from cuppy.fanstatic import view_needed
 
 class DocumentView(object):
 
@@ -11,13 +11,8 @@ class DocumentView(object):
 
     @view_config(route_name="view_doc",renderer="cuppy:templates/derived/document/view.mako")
     def doc_view(self):
-        document = self.context.document
-        return dict(document=document)
+        view_needed.need()
+        context = self.context.document
+        return dict(document=context)
 
-    @view_config(route_name="add_doc", renderer="cuppy:templates/derived/document/add.mako")
-    def add(self):
-        pass
     
-    @view_config(route_name="edit_doc", renderer="cuppy:templates/derived/document/edit.mako")
-    def edit(self):
-        pass

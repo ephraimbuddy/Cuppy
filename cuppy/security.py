@@ -4,6 +4,10 @@ from pyramid.events import BeforeRender
 from cuppy.models.users import User
 from cuppy.utils.subscribers import add_renderer_globals
 from pyramid.security import Everyone, Authenticated, ALL_PERMISSIONS, Allow
+from pyramid_beaker import session_factory_from_settings
+
+def session_factory(**settings):
+    return session_factory_from_settings(settings)
 
 
 SITE_ACL = [
@@ -53,11 +57,13 @@ def groupfinder(userid,request):
 
 def includeme(config):
     settings = config.get_settings()
+    session_factory = settings["cuppy.session_factory"][0](**settings)
     authn_policy = CuppyAuthenticationPolicy(
         settings['cuppy.auth_secret'],
         hashalg='sha512',callback=groupfinder)
     config.set_authentication_policy(authn_policy)
     config.set_authorization_policy(ACLAuthorizationPolicy())
+    config.set_session_factory(session_factory)
     config.add_request_method(get_user, 'user', reify=True)
     config.add_subscriber(add_renderer_globals, BeforeRender)
     cache = RootFactory.__acl__
