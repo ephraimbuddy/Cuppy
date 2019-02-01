@@ -8,7 +8,6 @@
 <form action="${request.route_url('add_doc')}" method="post">
 <div class="box-body">
 ${form.csrf_token()}
-
 ${helper.render_field(form.title, class_="form-control")}
 ${helper.render_field(form.status)}
 ${helper.render_field(form.creation_date, class_="form-control")}

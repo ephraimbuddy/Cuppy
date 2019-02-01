@@ -1,7 +1,8 @@
 from pyramid.view import view_config
+from pyramid.httpexceptions import HTTPFound
 
 from js.html5shiv import html5shiv
-from cuppy.models.content import Document
+from cuppy.models import Document, ObjectInsert
 from cuppy.utils.util import title_to_slug
 from cuppy.forms.content import AddDocument
 from cuppy.fanstatic import edit_needed
@@ -18,24 +19,28 @@ def add_doc(request):
     edit_needed.need()
     form=AddDocument(request.POST, meta={'csrf_context':request.session})
     if request.POST and form.validate():
-        doc = Document(form.data)
-        # Handle meta TODO: use events for meta and user addition
-        doc.meta_title = doc.get_meta_title()
-        doc.description = doc.get_description()
-        if not form.data.slug:
-            doc.slug = doc.generate_unique_slug()
-        else:
-            doc.slug = title_to_slug(form.data.slug, doc.slugs)
-        doc.user = request.user
+        doc = Document(
+            title = form.title.data,
+            status = form.status.data,
+            creation_date = form.creation_date.data,
+            in_menu = form.in_menu.data,
+            body = form.body.data,
+            slug = form.slug.data,
+            meta_title = form.meta_title.data,
+            description = form.description.data
+        )
         request.dbsession.add(doc)
-            
-        return add_document_callback(request,doc)
+        event = ObjectInsert(doc, request)
+        request.registry.notify(event)
+        #TODO: handle meta description generation in event
+        
+        return HTTPFound(location = request.route_url('view_doc', slug=doc.slug))
     return dict(form=form)
 
 
 def add_document_callback(request, doc):
 
-    return request.route_url('view_doc', name=doc.name)
+    return HTTPFound(location = request.route_url('view_doc', slug=doc.slug))
 
     
     

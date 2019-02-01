@@ -5,9 +5,10 @@ import zope.sqlalchemy
 
 # import or define all models here to ensure they are attached to the
 # Base.metadata prior to any initialization routines
-from .content import Category, Tag, Post, Document  # flake8: noqa
+from .content import Content, Category, Tag, Post, Document  # flake8: noqa
 from .users import User # flake8: noqa
 from .meta import DBSession
+from .events import ObjectInsert, ObjectDelete, ObjectUpdate
 # run configure_mappers after defining all of the models to ensure
 # all relationships can be setup
 configure_mappers()

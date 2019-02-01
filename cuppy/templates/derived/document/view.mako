@@ -1,1 +1,1 @@
-<%inherit file="codepython:templates/base/layout.mako"/>
+<%inherit file="cuppy:templates/base/base.mako"/>

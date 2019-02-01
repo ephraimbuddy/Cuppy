@@ -13,3 +13,4 @@ def csrf_validation(event):
         token = event.request.POST.get("csrf_token")
         if token is None or token != event.request.session.get_csrf_token():
             raise HTTPForbidden('CSRF token is missing or invalid')
+

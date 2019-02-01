@@ -74,7 +74,7 @@ def disambiguate_name(name):
         except ValueError:
             parts.append('1')
         else:
-            parts[-1] = ""+(index + 1)
+            parts[-1] = ""+str(index + 1)
 
     else:
         parts.append('1')

@@ -71,7 +71,7 @@ class SiteRoot(Base):
 
     def generate_unique_slug(self):
         
-        return title_to_slug(self.title,self.slugs())
+        return title_to_slug(self.meta_title,self.slugs())
 
 
 
@@ -128,6 +128,7 @@ class Content(SiteRoot):
         self.user = user
         self.tags = tags
 
+        
     @classmethod
     def get_by_id(cls,id):
         return DBSession.query(cls).filter_by(id=id).first()

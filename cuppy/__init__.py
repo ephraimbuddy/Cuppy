@@ -73,7 +73,6 @@ def default_config(global_config, **settings):
         for module in settings["cuppy.includes"]:
             if module==get_module('cuppy.views.edit'):
                 config.include(module, route_prefix='dashboard')
-            print(module)
             config.include(module)
         pyramid_includes = config.registry.settings['pyramid.includes']
 

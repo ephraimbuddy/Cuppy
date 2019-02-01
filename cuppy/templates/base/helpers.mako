@@ -10,6 +10,13 @@
         <span class="text-danger">*</span>
     %endif
     <div class="help-block">${field.description}</div>
+    %if field.errors:
+        <ul class="errors list-unstyled">
+            %for error in field.errors:
+                <li class="text-danger">${error }</li>
+            %endfor 
+        </ul>
+    %endif
 </div>
 
 
@@ -24,11 +31,25 @@
             </label>
         %endfor
     </div>
+    %if field.errors:
+        <ul class="errors list-unstyled">
+            %for error in field.errors:
+                <li class="text-danger">${error }</li>
+            %endfor 
+        </ul>
+    %endif
 </div>
 %elif field.type == "DateTimeField":
 <div class="form-group">
     ${field.label}
     ${field}
+    %if field.errors:
+        <ul class="errors list-unstyled">
+            %for error in field.errors:
+                <li class="text-danger">${error }</li>
+            %endfor 
+        </ul>
+    %endif
 </div>
 
 %else:
@@ -42,7 +63,7 @@
     %if field.errors:
         <ul class="errors list-unstyled">
             %for error in field.errors:
-                <li>${error }</li>
+                <li class="text-danger">${error }</li>
             %endfor 
         </ul>
     %endif
