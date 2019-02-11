@@ -39,11 +39,13 @@ class ContentForm(BaseForm):
                                             validators.Length(min=3, max=200)],
                                  filters = [strip_filter])
     creation_date = DateTimeField("Creation Date",
-                                description = "Leave blank to have the published date auto-generated")
+                                description = "Leave blank to have the creation date auto-generated. format=> Y-m-d H:m:s")
 
     status = RadioField("Status", choices = [('draft', 'Draft'), ('published', 'Published')], default="published")
 
     in_menu = BooleanField("In menu", default='checked')
+    
+    
 
 
 

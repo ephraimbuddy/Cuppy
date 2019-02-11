@@ -7,18 +7,14 @@ from ...models.content import Document
 from ...security import SITE_ACL
 
 def includeme(config):
-    config.add_route("view_doc", 'page/{slug}', factory=doc_factory)
+    config.add_route("view_doc", 'page/*slug', factory=doc_factory)
     
 
 
 def doc_factory(request):
     slug = request.matchdict['slug']
-    parts = slug.split('/')
-    if len(parts)>1:
-        name = parts[-1]
-    name=slug
-    doc = Document.get_by_slug(name)
-    
+    slug = slug[-1]
+    doc = Document.get_by_slug(slug)
     if doc is None:
         raise HTTPNotFound()
     return DocumentResource(doc)

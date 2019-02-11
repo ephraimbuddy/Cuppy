@@ -32,9 +32,9 @@ class SiteRoot(Base):
     # Slug is the url of the content
     slug = Column(String(2000), nullable=False)
     
-    parent_id = Column(Integer, ForeignKey(id))
+    parent_id = Column(Integer, ForeignKey('site_root.id'))
     children = relationship("SiteRoot",
-                        cascade="all, delete,delete-orphan",
+                        #cascade="all, delete,delete-orphan",
                         backref=backref("parent", remote_side=id)
                     )
     type = Column(String(50), nullable=False)
@@ -47,13 +47,13 @@ class SiteRoot(Base):
     def __init__(self, 
         meta_title: str = None, 
         description: str = None,
-        slug: str = None, parent: 
-        "Siteroot" = None):
+        slug: str = None, 
+        parent_id: int = None):
 
         self.meta_title = meta_title
         self.description = description
         self.slug = slug
-        self.parent = parent
+        self.parent_id = parent_id
                 
 
     def keys(self):
@@ -135,6 +135,7 @@ class Content(SiteRoot):
     
     @classmethod
     def get_by_slug(cls,slug):
+        
         return DBSession.query(cls).filter_by(slug=slug).first()
         
 

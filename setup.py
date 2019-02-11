@@ -60,6 +60,7 @@ setup(
     zip_safe=False,
     extras_require={
         'testing': tests_require,
+        'fanstatic':'fanstatic[jsmin]'
     },
     install_requires=requires,
     entry_points={
