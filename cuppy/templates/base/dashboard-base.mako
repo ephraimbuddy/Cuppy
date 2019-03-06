@@ -3,13 +3,22 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Cuppy CMS | Dashboard</title>
+  <title>${api.page_title}</title>
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-  
-  
-
+  <link rel="stylesheet" href="${request.static_url('cuppy:static/bootstrap/css/bootstrap.min.css')}">
+  <link rel="stylesheet" href="${request.static_url('cuppy:static/adminlte/css/AdminLTE.min.css')}">
+  <link rel="stylesheet" href="${request.static_url('cuppy:static/adminlte/css/skin-blue.min.css')}">
+ <link rel="stylesheet" href="${request.static_url('cuppy:static/fontawesome/css/font-awesome.min.css')}">
+ <link rel="stylesheet" href="${request.static_url('cuppy:static/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css')}">
+  <%block name="header_tags"></%block>
   <!-- Google Font -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+  <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
@@ -87,40 +96,30 @@
       <!-- sidebar menu: :  -->
       <ul class="sidebar-menu" data-widget="tree">
         <li class="header">MAIN NAVIGATION</li>
-        <li class="active treeview">
+        <li class="treeview">
           <a href="#">
-            <i class="fa fa-dashboard"></i> <span>Dashboard</span>
+            <i class="fa fa-dashboard"></i> <span>Content</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
           </a>
           <ul class="treeview-menu">
-            <li class="active"><a href="index.html"><i class="fa fa-circle-o"></i> Dashboard v1</a></li>
-            <li><a href="index2.html"><i class="fa fa-circle-o"></i> Dashboard v2</a></li>
+            <li><a href="${request.route_url('page')}"><i class="fa fa-circle-o"></i> Pages</a></li>
+            
           </ul>
         </li>
         <li class="treeview">
           <a href="#">
-            <i class="fa fa-files-o"></i>
-            <span>Layout Options</span>
+            <i class="fa fa-users"></i> <span>Users</span>
             <span class="pull-right-container">
-              <span class="label label-primary pull-right">4</span>
+              <i class="fa fa-angle-left pull-right"></i>
             </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="pages/layout/top-nav.html"><i class="fa fa-circle-o"></i> Top Navigation</a></li>
-            <li><a href="pages/layout/boxed.html"><i class="fa fa-circle-o"></i> Boxed</a></li>
-            <li><a href="pages/layout/fixed.html"><i class="fa fa-circle-o"></i> Fixed</a></li>
-            <li><a href="pages/layout/collapsed-sidebar.html"><i class="fa fa-circle-o"></i> Collapsed Sidebar</a></li>
+            <li><a href="#"><i class="fa fa-circle-o"></i> users</a></li>
+            <li><a href="${request.route_url('list_group')}"><i class="fa fa-circle-o"></i> Groups</a></li>
+            
           </ul>
-        </li>
-        <li>
-          <a href="pages/widgets.html">
-            <i class="fa fa-th"></i> <span>Widgets</span>
-            <span class="pull-right-container">
-              <small class="label pull-right bg-green">new</small>
-            </span>
-          </a>
         </li>
         
       </ul>
@@ -162,7 +161,49 @@
 </div>
 <!-- ./wrapper -->
 
-
-
+<script src="${request.static_url('cuppy:static/jquery/jquery.v3.3.1.min.js')}"></script>
+<script src="${request.static_url('cuppy:static/bootstrap/js/bootstrap.min.js')}"></script>
+<script src="${request.static_url('cuppy:static/adminlte/js/adminlte.min.js')}"></script>
+<script src="${request.static_url('cuppy:static/jquery/fastclick.js')}"></script>
+<script src="${request.static_url('cuppy:static/jquery/jquery.slimscroll.min.js')}"></script>
+<script src="${request.static_url('cuppy:static/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js')}"></script>
+<%block name="bottom_tags">
+<script>
+$(document).ready(function() {
+     function getDateTime() {
+    var now     = new Date(); 
+    var year    = now.getFullYear();
+    var month   = now.getMonth()+1; 
+    var day     = now.getDate();
+    var hour    = now.getHours();
+    var minute  = now.getMinutes();
+    var second  = now.getSeconds(); 
+    if(month.toString().length == 1) {
+         month = '0'+month;
+    }
+    if(day.toString().length == 1) {
+         day = '0'+day;
+    }   
+    if(hour.toString().length == 1) {
+         hour = '0'+hour;
+    }
+    if(minute.toString().length == 1) {
+         minute = '0'+minute;
+    }
+    if(second.toString().length == 1) {
+         second = '0'+second;
+    }   
+    var dateTime = year+'-'+month+'-'+day+' '+hour+':'+minute+':'+second;   
+     return dateTime;
+}
+$("#now").click(function(){
+    var datetime = new Date().toLocalString;
+    $("#creation_date").val(getDateTime());
+});
+//bootstrap WYSIHTML5 - text editor
+    $('#body').wysihtml5()
+});
+</script>
+</%block>
 </body>
 </html>

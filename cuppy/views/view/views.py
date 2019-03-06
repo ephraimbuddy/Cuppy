@@ -1,6 +1,5 @@
 from pyramid.view import view_config
 
-from cuppy.fanstatic import view_needed
 
 class DocumentView(object):
 
@@ -9,10 +8,14 @@ class DocumentView(object):
         self.session = request.session
         self.context = request.context
 
-    @view_config(route_name="view_doc",renderer="cuppy:templates/derived/document/view.mako")
+    @view_config(route_name="view_doc", renderer="cuppy:templates/derived/document/document.mako")
     def doc_view(self):
-        view_needed.need()
-        context = self.context.document
+        
+        context = self.context.obj
         return dict(document=context)
+
+    
+
+    
 
     

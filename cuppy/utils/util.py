@@ -82,7 +82,7 @@ def disambiguate_name(name):
 
 
 def title_to_slug(title, blacklist=(), max_length=200):
-    blacklist = [i.lower() for i in blacklist]
+
     normalizer = cuppy_settings('url_normalizer')[0]
     name = normalizer(title, locale='en', max_length=max_length)
     if name not in blacklist:
@@ -91,6 +91,18 @@ def title_to_slug(title, blacklist=(), max_length=200):
         name = disambiguate_name(name)
     return name
 
+
+def cuppy_remember(request, user, event='L'):
+    from cuppy.models import AuthUserLog
+    if asbool(cuppy_settings('log_logins')):
+        ip_addr = request.client_addr
+        record = AuthUserLog(user_id=user.id,
+                             ip_addr=ip_addr,
+                             event=event)
+        request.dbsession.add(record)
+        request.dbsession.flush()
+        return remember(request, user.id)
+    return remember(request, user.id)
 
 def get_settings():
     return get_current_registry().settings
@@ -129,58 +141,6 @@ def confirm_token(token, expiration=86400):
     except:
         return False
     return email
-
-
-core_css = ['bootstrap','fontawesome', 'adminlte']
-
-
-class StaticResource(object):
-    """ A class to enable addition of static resources to project"""
-    def __init__(self, resources:list=None, css:bool=True):
-        
-        self.is_css = css
-
-        if not resources:
-            resources =[]
-        if not isinstance(resources, list):
-            raise ValueError("resources must be a list of strings or a list of StaticResource object")
-        self.resources = []
-        self.css_resources =[]
-        self.js_resources = []
-        for resource in resources:
-            self.add(resource)
-
-    def add(self, resource):
-        if isinstance(resource,self.__class__):
-            self.resources.extend(resource.resources)
-        elif isinstance(resource,str):
-            if self.is_css:
-                #deal with css files
-                if asbool(cuppy_settings('minified_css')):
-                    self.css_resources.append('.'.join([resource,'min','css']))
-                    self.resources.append('.'.join([resource,'min','css']))
-                else:
-                    self.css_resources.append('.'.join([resource,'min','css']))
-                    self.resources.append('.'.join([resource,'css']))
-            else:
-                if asbool(cuppy_settings('minified_js')):
-                    self.js_resources.append('.'.join([resource,'min','js']))
-                    self.resources.append('.'.join([resource,'min','js']))
-                else:
-                    self.js_resources.append('.'.join([resource,'min','js']))
-                    self.resources.append('.'.join([resource,'js']))
-        else:
-            raise ValueError("resource must be of type string or  StaticResource Object")
-
-    def list_js_resources(self):
-        site_url = cuppy_settings('site_url')
-        search_path = cuppy_settings('static_path')
-        js = []
-        for root, dirnames, files in os.walk(search_path):
-            for file in self.js_resources:
-                if file in files:
-                    js.append(os.path.join(site_url,root,file))
-        return js
 
 
 

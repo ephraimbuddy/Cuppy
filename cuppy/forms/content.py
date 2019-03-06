@@ -1,12 +1,13 @@
 from datetime import timedelta
 
-from wtforms import Form
+from wtforms import Form, Field
 from wtforms import StringField
 from wtforms import validators
 from wtforms import TextAreaField
 from wtforms import RadioField
 from wtforms import BooleanField
 from wtforms import DateTimeField
+from wtforms.widgets import TextInput
 from wtforms.csrf.session import SessionCSRF
 
 from pyramid.settings import asbool
@@ -23,7 +24,42 @@ class BaseForm(Form):
         csrf_time_limit = timedelta(minutes=20)
     
 
-    
+class TagListField(Field):
+    widget = TextInput()
+
+    def _value(self):
+        if self.data:
+            return u', '.join(self.data)
+        else:
+            return u''
+
+    def process_formdata(self, valuelist):
+        if valuelist:
+            self.data = [x.strip() for x in valuelist[0].split(',')]
+        else:
+            self.data = []
+
+
+class BetterTagListField(TagListField):
+    def __init__(self, label='', validators=None, remove_duplicates=True, **kwargs):
+        super(BetterTagListField, self).__init__(label, validators, **kwargs)
+        self.remove_duplicates = remove_duplicates
+
+    def process_formdata(self, valuelist):
+        super(BetterTagListField, self).process_formdata(valuelist)
+        if self.remove_duplicates:
+            self.data = list(self._remove_duplicates(self.data))
+
+    @classmethod
+    def _remove_duplicates(cls, seq):
+        """Remove duplicates in a case insensitive, but case preserving manner"""
+        d = {}
+        for item in seq:
+            if item.lower() not in d:
+                d[item.lower()] = True
+                yield item
+
+
 class ContentForm(BaseForm):
 
     # Meta
@@ -45,6 +81,7 @@ class ContentForm(BaseForm):
 
     in_menu = BooleanField("In menu", default='checked')
     
+    tags = BetterTagListField("Tags", description="Enter a comma separated list of tags")
     
 
 

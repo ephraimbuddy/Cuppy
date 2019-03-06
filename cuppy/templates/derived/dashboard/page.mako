@@ -1,5 +1,7 @@
 <%inherit file="cuppy:templates/base/dashboard-base.mako"/>
-<%namespace file="cuppy:templates/base/helpers.mako" import="render_pages"/>
+<%namespace file="cuppy:templates/base/helpers.mako" import="render_pages, simple_modal"/>
+<%block name="bottom_tags">
+${parent.bottom_tags}
         <script>
               jQuery(function($) {
     $('.add_docs').change(function() {
@@ -19,12 +21,13 @@
     });
 });
               </script>
+              </%block>
 <div class="row">
-    <div class="col-lg-8 col-md-12">
+    <div class="col-lg-9 col-md-12">
 <div class="box box-primary">
     <div class="box-header">
     <i class="fa fa-folder"></i>
-    <div class="box-title">Documents ${len(docs)}</div>
+    <div class="box-title">Select Page to change</div>
     <div class="pull-right">
     <select class="add_docs">
                 <option>Add ...</option>
@@ -45,6 +48,9 @@
     </div>
 </div>
     </div> <!-- End col-lg-6 col-md-12 -->
-    <div class="col-lg-4 col-md-12">
+    <div class="col-lg-3 col-md-12">
     </div>
 </div>
+
+
+${simple_modal("Delete Page", "Do you really want to delete this page?")}

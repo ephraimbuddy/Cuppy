@@ -1,2 +1,2 @@
-<%inherit file="layout.mako"/>
-<h1>POSTS</h1>
+<%inherit file="cuppy:templates/base/base.mako"/>
+

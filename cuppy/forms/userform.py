@@ -1,6 +1,12 @@
+import re
 from cuppy.forms.content import BaseForm, strip_filter
 from wtforms import StringField, PasswordField ,validators, ValidationError, FileField, TextAreaField
 
+
+class GroupForm(BaseForm):
+    name = StringField("Name", validators = [validators.InputRequired(),
+            validators.Length(min=3, max=100)], filters=[strip_filter])
+    description = StringField("Description")
 
 
 def password_validator(form, field):
@@ -13,17 +19,24 @@ def password_validator(form, field):
     elif field.data==u'qwerty':
         raise ValidationError("Such passwords are known to be easy to guess, add more variety")
 
-
 class SignupForm(BaseForm):
     first_name = StringField("First name",validators=[validators.InputRequired(),
                     validators.Length(min=3, max=100)], filters=[strip_filter])
     last_name = StringField("Last name",validators=[validators.InputRequired(),
                     validators.Length(min=3, max=100)], filters=[strip_filter])
+    username = StringField("Username", validators = [validators.Regexp("\w+$", message="Username can only contain letters,numbers and underscores")], 
+        filters=[strip_filter])
     email = StringField("Email", validators=[validators.InputRequired(),
                     validators.Email(message="invalid email address")], filters=[strip_filter])
     password = PasswordField("Password", validators=[validators.InputRequired(),
                 password_validator,validators.Length(min=6),validators.EqualTo("confirm", message="Password must match")])
     confirm = PasswordField("Repeat Password", validators=[validators.InputRequired()])
+
+
+class LoginForm(BaseForm):
+    email = StringField("Email", validators=[validators.InputRequired(),
+                    validators.Email(message="invalid email address")], filters=[strip_filter])
+    password = PasswordField("Password", validators=[validators.InputRequired()])
      
 class NameEditForm(BaseForm):
     first_name = StringField("First name", validators=[validators.InputRequired()])

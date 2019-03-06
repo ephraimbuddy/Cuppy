@@ -1,4 +1,4 @@
-from cuppy.views.document import doc_factory
+from cuppy.views.view import doc_factory
 
 def includeme(config):
     # Prefix all url with 'dashboard' at configuration
@@ -8,8 +8,16 @@ def includeme(config):
     config.add_route('page', 'page')
     config.add_route('add_doc', 'page/create*parent_id', pregenerator = pregen)
     config.add_route("edit_doc", 'page/*slug', factory=doc_factory)
-    config.add_route("delete_doc", 'page/{id}/delete')
+    config.add_route("delete_doc", 'delete-page/*slug', factory=doc_factory)
+    
+    #Permission groups
+    config.add_route('list_group', '/groups')
+    config.add_route('add_group', '/groups/add')
+    config.add_route('edit_group', '/groups/{id}/edit')
+    config.add_route('delete_group','/groups/{id}/delete')
 
+    #Users
+    config.add_route('users', '/users')
 
 def pregen(request, elements, kw):
     kw.setdefault('parent_id', '')

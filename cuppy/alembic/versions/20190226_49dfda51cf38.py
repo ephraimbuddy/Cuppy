@@ -1,8 +1,8 @@
 """init
 
-Revision ID: a00248bfc96b
+Revision ID: 49dfda51cf38
 Revises: 
-Create Date: 2019-01-30 07:34:18.462390
+Create Date: 2019-02-26 01:58:25.249786
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'a00248bfc96b'
+revision = '49dfda51cf38'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -33,7 +33,8 @@ def upgrade():
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('meta_title', sa.Unicode(length=250), nullable=True),
     sa.Column('description', sa.UnicodeText(), nullable=True),
-    sa.Column('slug', sa.String(length=2000), nullable=False),
+    sa.Column('slug', sa.String(length=2000), nullable=True),
+    sa.Column('position', sa.Integer(), nullable=True),
     sa.Column('parent_id', sa.Integer(), nullable=True),
     sa.Column('type', sa.String(length=50), nullable=False),
     sa.ForeignKeyConstraint(['parent_id'], ['site_root.id'], name=op.f('fk_site_root_parent_id_site_root')),
@@ -96,10 +97,13 @@ def upgrade():
     op.create_table('content_tags',
     sa.Column('tag_id', sa.Integer(), nullable=False),
     sa.Column('content_id', sa.Integer(), nullable=False),
+    sa.Column('position', sa.Integer(), nullable=False),
     sa.ForeignKeyConstraint(['content_id'], ['contents.id'], name=op.f('fk_content_tags_content_id_contents')),
     sa.ForeignKeyConstraint(['tag_id'], ['tags.id'], name=op.f('fk_content_tags_tag_id_tags')),
     sa.PrimaryKeyConstraint('tag_id', 'content_id', name=op.f('pk_content_tags'))
     )
+    op.create_index(op.f('ix_content_tags_content_id'), 'content_tags', ['content_id'], unique=False)
+    op.create_index(op.f('ix_content_tags_tag_id'), 'content_tags', ['tag_id'], unique=False)
     op.create_table('documents',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('body', sa.UnicodeText(), nullable=True),
@@ -126,6 +130,8 @@ def downgrade():
     op.drop_table('posts')
     op.drop_table('files')
     op.drop_table('documents')
+    op.drop_index(op.f('ix_content_tags_tag_id'), table_name='content_tags')
+    op.drop_index(op.f('ix_content_tags_content_id'), table_name='content_tags')
     op.drop_table('content_tags')
     op.drop_index('user_group_index', table_name='user_group')
     op.drop_table('user_group')

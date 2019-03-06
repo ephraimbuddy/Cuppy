@@ -29,9 +29,8 @@ requires = [
     'webhelpers2',
     'unidecode',
     'pytz',
-    'js.adminlte',
-    'js.jquery_form',
-    'pyramid_beaker'
+    'pyramid_beaker',
+    'pyramid_deform'
 ]
 
 tests_require = [

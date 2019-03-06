@@ -21,12 +21,12 @@ def doc_factory(request):
     
 
 class DocumentResource(object):
-    def __init__(self,document):
-       self.document = document
-
+    def __init__(self,object):
+       self.obj = object
+        
     def __acl__(self):
         acl = SITE_ACL
-        acl.append((Allow, str(self.document.user.id),('edit','state_change')))
+        acl.append((Allow, str(self.obj.user.id),('edit','state_change')))
         return acl
     
   
