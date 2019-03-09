@@ -70,7 +70,7 @@ class TemplateApi(object):
             title = self.context.obj.title
         except AttributeError:
             return self.site_title
-        return "{0} - {1}".format(title, self.site_title)
+        return title
     
     @reify
     def meta_keywords(self):

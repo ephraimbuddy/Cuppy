@@ -9,7 +9,7 @@
     
     <meta name="description" content="${api.meta_description}">
     
-    <title>${api.page_title}</title>
+    <title>${title or api.page_title} - ${api.site_title}</title>
 
   <link rel="stylesheet" href="${request.static_url('cuppy:static/bootstrap/css/bootstrap.min.css')}">
   <link rel="stylesheet" href="${request.static_url('cuppy:static/adminlte/css/AdminLTE.min.css')}">

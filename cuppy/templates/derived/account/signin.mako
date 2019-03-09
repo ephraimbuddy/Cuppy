@@ -64,7 +64,7 @@
       </div>
     </form>
 
-    <a href="#">I forgot my password</a><br>
+    <a href="${request.route_url('forgot_password')}">I forgot my password</a><br>
     <a href="${request.route_url('signup')}" class="text-center">Register a new user</a>
 
   </div>

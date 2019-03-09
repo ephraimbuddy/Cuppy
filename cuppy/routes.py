@@ -11,6 +11,10 @@ def includeme(config):
     config.add_route('signup', '/signup')
     config.add_route('signin','/signin')
     config.add_route('signout', '/signout')
+    config.add_route('email_activate', '/activate/{token}')
+    config.add_route('forgot_password', '/passforgot')
+    config.add_route('reset_password', '/reset/{token}')
+    config.add_route('send_confirmation_email', '/send_email_confirmation')
     
 
 def userfactory(request):

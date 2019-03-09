@@ -9,6 +9,10 @@ class GroupForm(BaseForm):
     description = StringField("Description")
 
 
+class ChangeEmailForm(BaseForm):
+    email = StringField("Email", validators=[validators.InputRequired(),
+                                   validators.Email(message="invalid email address")], filters=[strip_filter])
+                                   
 def password_validator(form, field):
     if len(field.data)<6:
         raise ValidationError("Your password is too short, add more variety")
@@ -32,6 +36,12 @@ class SignupForm(BaseForm):
                 password_validator,validators.Length(min=6),validators.EqualTo("confirm", message="Password must match")])
     confirm = PasswordField("Repeat Password", validators=[validators.InputRequired()])
 
+
+class ResetPasswordForm(BaseForm):
+    password = PasswordField("Password", validators=[validators.InputRequired(),
+                    password_validator,validators.Length(min=6),validators.EqualTo("confirm_password", message="Password must match")])
+    confirm_password = PasswordField("Repeat Password", validators=[validators.InputRequired()])
+    
 
 class LoginForm(BaseForm):
     email = StringField("Email", validators=[validators.InputRequired(),
