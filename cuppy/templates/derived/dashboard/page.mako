@@ -1,5 +1,19 @@
 <%inherit file="cuppy:templates/base/dashboard-base.mako"/>
 <%namespace file="cuppy:templates/base/helpers.mako" import="render_pages, simple_modal"/>
+
+<%block name="content_header">
+<!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        Dashboard
+        <small>Pages</small>
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="${request.route_url('dashboard')}"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">pages</li>
+      </ol>
+      </section>
+</%block>
 <%block name="bottom_tags">
 ${parent.bottom_tags}
         <script>

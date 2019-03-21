@@ -47,13 +47,6 @@ def add_doc(request):
     return dict(form=form, action_url= request.route_url('add_doc', parent_id=parent_id))
 
 
-
-def add_document_callback(request, doc):
-
-    return HTTPFound(location = request.route_url('view_doc', slug=doc.slug))
-
-    
-    
 @view_config(route_name="edit_doc", renderer="cuppy:templates/derived/document/edit.mako")
 def edit(request):
     

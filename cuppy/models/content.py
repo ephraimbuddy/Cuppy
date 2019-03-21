@@ -63,19 +63,24 @@ class SiteRoot(Base):
                 
 
     def keys(self, parent_id):
+        """The keys here are the slugs. Given a parent id 
+        return the slugs of the children to
+        this parent. If the parent id is None then return the
+         slugs of all objects with no parent"""
         if parent_id:
             doc = DBSession.query(SiteRoot).get(parent_id)
             return [child.slug for child in doc.children]
         return self.slugs()
     
     def slugs(self):
+        "Returns slugs of all objects with no parent"
         return [i.slug for i in DBSession.query(SiteRoot).filter(SiteRoot.parent_id==None).all()]
 
     def values(self):
         return self.children
 
     def get_slug(self):
-        
+        "Child classes should override this to provide a better url generation"
         return self.slug
 
     def generate_unique_slug(self, parent_id):
@@ -85,6 +90,15 @@ class SiteRoot(Base):
     def change_slug(self, slug):
         "Change slug of an existing object to a new slug"
         return title_to_slug(slug, self.keys(self.parent_id))
+
+    @classmethod
+    def get_by_id(cls,id):
+        return DBSession.query(cls).filter_by(id=id).first()
+    
+    @classmethod
+    def get_by_slug(cls,slug):
+        
+        return DBSession.query(cls).filter_by(slug=slug).first()
 
 
 class Tag(Base):
@@ -177,20 +191,24 @@ class Content(SiteRoot):
         self.in_menu = in_menu
         self.user = user
         self.tags = tags or []
-
-        
-    @classmethod
-    def get_by_id(cls,id):
-        return DBSession.query(cls).filter_by(id=id).first()
     
     @classmethod
-    def get_by_slug(cls,slug):
-        
-        return DBSession.query(cls).filter_by(slug=slug).first()
+    def published_with_correct_date(self):
+        if self.published and self.creation_date <= datetime.datetime.now():
+            return True
     
-    def generate_unique_slug(self, parent_id):
-        
-        return title_to_slug(self.title,self.keys(parent_id))
+    @classmethod
+    def get_query(cls, with_selectinload=True):
+        query = DBSession.query(cls)
+        if with_selectinload:
+            query = query.options(selectinload('tags'), selectinload('users'))
+        return query
+    
+    @classmethod
+    def get_by_tagname(cls, tag_name, with_selectinload=True):
+        query = cls.get_query(with_selectinload)
+        return query.filter(Content.tags.any(name=tag_name)).all()
+   
 
 class Document(Content):
     " Document adds body to content"
@@ -218,47 +236,39 @@ class Document(Content):
             return "%s/%s" % (self.parent.slug, slug)
         return slug
 
-    def set_slug(self, slug):
+    def set_slug(self, new_slug):
+        "Changes the document slug"
         
-        pass
+        available_slugs = self.keys(self.parent_id)
+        # Remove this particular document's slug from available slug
+        # to avoid throwing error if new slug is same as old slug
+        available_slugs.pop(self.slug)
+        
+        # Check if new_slug exist
+        if new_slug in available_slugs:
+            raise ValueError("There's already a document with this slug, you can either change"  
+            "the slug or change the parent of this document and try again")
+        self.slug = new_slug
+        
+
     
-    def set_parent(self):
-        pass
+    def set_parent(self, new_parent):
 
+        "Changes the document parent and the slug if necessary"
 
+        # Avoid a circle
+        parent = new_parent
+        while parent is not None:
+            if parent.id == self.id:
+                raise AttributeError(" You can't set a page or it's child as parent")
+            parent = parent.parent
 
-class Category(Base):
-    __tablename__ = 'categories'
-    id = Column(Integer, primary_key=True)
-    name = Column(Unicode(50), nullable=False)
-    posts = relationship('Post', back_populates="category")
-
-
-class Post(Document):
-    __tablename__ = "posts"
-    id = Column(Integer, ForeignKey("documents.id"), primary_key=True)
-    category_id = Column(Integer, ForeignKey('categories.id'))
-    category = relationship("Category", back_populates="posts")
-    
-
-    @classmethod
-    def get_query(cls, with_joinedload = True):
-        query = DBSession.query(cls)
-        if with_joinedload:
-            query = query.options(selectinload(cls.tags))
-        return query
-    
-    @classmethod
-    def get_by_id(cls, id, with_joinedload=True):
-        post = cls.get_query(with_joinedload)
-        return post.filter(cls.id==id).first()
-    
-    @classmethod
-    def post_bunch(cls, order_by, how_many=10, published=True, with_joinedload=True):
-        posts = cls.get_query(with_joinedload)
-        posts = posts.filter(published==published).order_by(order_by)
-        return posts.limit(how_many).all()
-
+        self.parent = new_parent
+        try:
+            self.set_slug(self.slug)
+        except ValueError:
+            #We have to now generate a new slug
+            self.generate_unique_slug(self.parent_id)    
 
 
 class File(Content):

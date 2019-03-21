@@ -67,6 +67,12 @@ def delete_group(request):
     return HTTPFound(location=request.route_url('list_group'))
     
 
+@view_config(route_name="users", renderer="cuppy:templates/derived/account/users.mako")
+def users(request):
+    
+    return dict()
+
+
 @view_config(route_name="signup", renderer='cuppy:templates/derived/account/signup.mako')
 def reg(request):
     form = SignupForm(request.POST, meta={'csrf_context':request.session})

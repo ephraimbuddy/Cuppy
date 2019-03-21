@@ -5,7 +5,7 @@ import zope.sqlalchemy
 
 # import or define all models here to ensure they are attached to the
 # Base.metadata prior to any initialization routines
-from .content import Content, Category, Tag, Post, Document  # flake8: noqa
+from .content import Content, Tag, Document  # flake8: noqa
 from .users import User, Groups, AuthUserLog, SiteActivity # flake8: noqa
 from .meta import DBSession, Base
 from .events import ObjectInsert, ObjectDelete, ObjectUpdate
