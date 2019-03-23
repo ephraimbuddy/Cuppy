@@ -128,7 +128,10 @@
   <!-- /.content-wrapper -->
   <footer class="main-footer">
     <div class="pull-right hidden-xs">
-      <b>Version</b> 0.1
+    <%!
+    import cuppy
+    %>
+      <b>Version</b> ${cuppy.get_version()}
     </div>
     <strong>Copyright &copy; 2019 <a href="#">Cuppy CMS</a>.</strong> All rights
     reserved.

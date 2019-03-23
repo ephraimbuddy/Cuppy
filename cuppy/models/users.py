@@ -32,6 +32,14 @@ class Groups(Base):
     def __repr__(self):
         return u'%s' % self.name
 
+    @classmethod
+    def get_all(cls):
+        return DBSession.query(cls).all()
+    
+    @classmethod
+    def get_by_id(cls,id_):
+        return DBSession.query(cls).get(id_)
+
 
 class User(Base):
     __tablename__ = "users"
@@ -42,6 +50,7 @@ class User(Base):
     first_name = Column(Unicode(50))
     last_name = Column(Unicode(50))
     about = Column(UnicodeText)
+    #joined_date = Column(DateTime, default = func.now())
     mygroups = relationship("Groups", secondary=user_group, back_populates="users")
     contents = relationship('Content', back_populates="user")
     user_log = relationship('AuthUserLog', back_populates='user', cascade='all, delete, delete-orphan')
@@ -72,6 +81,16 @@ class User(Base):
     def get_by_username(cls, username):
         obj = DBSession.query(cls).filter_by(username=username).first()
         return obj
+    
+    @property
+    def last_login(self):
+        q =[x for x in self.user_log if x.event=="L"]
+        if len(q)>0:
+            return q[-1].time
+        q = [x for x in self.user_log if x.event=='R']
+        if len(q)>0:
+            return q[-1].time
+        return 'never'
 
     @classmethod
     def get_by_email(cls, email):

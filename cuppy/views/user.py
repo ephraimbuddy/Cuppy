@@ -9,6 +9,7 @@ from cuppy.forms.userform import ChangePasswordForm
 from cuppy.forms.userform import ResetPasswordForm
 from cuppy.forms.userform import ChangePasswordForm
 from cuppy.forms.userform import ChangeEmailForm
+from cuppy.forms.userform import UserEditForm
 from cuppy.models import Groups
 from cuppy.models import ObjectInsert
 from cuppy.models import ObjectUpdate
@@ -69,8 +70,58 @@ def delete_group(request):
 
 @view_config(route_name="users", renderer="cuppy:templates/derived/account/users.mako")
 def users(request):
-    
-    return dict()
+    users = request.dbsession.query(User).all()
+    return dict(users = users)
+
+
+@view_config(route_name='admin_edit_user', renderer = "cuppy:templates/derived/account/admin_edit_user.mako")
+def admin_edit_users(request):
+    id_ = request.matchdict['id']
+    user = User.get_by_id(id_)
+    if not user:
+        return HTTPNotFound()
+    groups = Groups.get_all()
+    form = UserEditForm(request.POST, meta={'csrf_context': request.session}, obj=user)
+    if request.POST and form.validate():
+        user.first_name = form.first_name.data
+        user.last_name = form.last_name.data
+        user.about = form.about.data
+        if user.email != form.email.data:
+            user_is_available = User.get_by_email(form.email.data)
+            if not user_is_available:
+                user.email == form.email.data 
+        request.dbsession.merge(user)
+        return HTTPFound(location = request.route_url('users'))
+    return dict(user=user, form=form, groups=groups)
+
+
+@view_config(route_name="add_to_group")
+def make_admin(request):
+    id_ = request.matchdict['user_id']
+    user = User.get_by_id(id_)
+    name = request.matchdict['name']
+    group = request.dbsession.query(Groups).filter(Groups.name==name).first()
+    if user and group:
+        user.mygroups.append(group)
+        request.session.flash('success; %s added to group %s'%(user.fullname,group.name))
+        return HTTPFound(location=request.route_url('admin_edit_user',id=user.id))
+    request.session.flash('danger; Not successfull')
+    return HTTPFound(location=request.route_url('admin_edit_user', id=user.id))
+
+
+@view_config(route_name="remove_from_group")
+def remove_from_group(request):
+    id_ = request.matchdict['user_id']
+    user = User.get_by_id(id_)
+    name = request.matchdict['name']
+    group = request.dbsession.query(Groups).filter(Groups.name==name).first()
+    if user and group:
+        if group in user.mygroups:
+            user.mygroups.remove(group)
+            request.session.flash('success; %s removed from group %s'%(user.fullname,group.name))
+        return HTTPFound(location=request.route_url('admin_edit_user',id=user.id))
+    request.session.flash('danger; Not successfull')
+    return HTTPFound(location=request.route_url('admin_edit_user', id=user.id))
 
 
 @view_config(route_name="signup", renderer='cuppy:templates/derived/account/signup.mako')
