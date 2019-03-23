@@ -1,3 +1,4 @@
+import pkg_resources
 from base64 import b64encode
 from sqlalchemy import engine_from_config
 from pyramid.config import Configurator
@@ -67,6 +68,11 @@ def _resolve_dotted(d,keys=conf_dotted):
             new_value.append(get_module(name))
         resolved[key] = new_value
     return resolved
+
+
+def get_version():
+    return pkg_resources.require("cuppy")[0].version
+
 
 def default_config(global_config, **settings):
     

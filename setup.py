@@ -2,6 +2,8 @@ import os
 
 from setuptools import setup, find_packages
 
+version = "0.1"
+
 here = os.path.abspath(os.path.dirname(__file__))
 with open(os.path.join(here, 'README.txt')) as f:
     README = f.read()
@@ -41,19 +43,20 @@ tests_require = [
 
 setup(
     name='cuppy',
-    version='0.1',
-    description='cuppy',
+    version=version,
+    description='A simple pythonic Content Management system based on pyramid framework and SQLAlchemy',
     long_description=README + '\n\n' + CHANGES,
     classifiers=[
         'Programming Language :: Python',
+        'Programming Language :: Python :: 3'
         'Framework :: Pyramid',
         'Topic :: Internet :: WWW/HTTP',
         'Topic :: Internet :: WWW/HTTP :: WSGI :: Application',
     ],
-    author='',
-    author_email='',
+    author='Ephraim Anierobi',
+    author_email='ephraimanierobi@gmail.com',
     url='',
-    keywords='cuppy CMS framework web pyramid pylons',
+    keywords='cuppy cms python sqlalchemy bootstrap framework web pyramid pylons',
     packages=find_packages(),
     include_package_data=True,
     zip_safe=False,
