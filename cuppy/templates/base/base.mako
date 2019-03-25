@@ -15,6 +15,7 @@
   <link rel="stylesheet" href="${request.static_url('cuppy:static/adminlte/css/AdminLTE.min.css')}">
   <link rel="stylesheet" href="${request.static_url('cuppy:static/adminlte/css/skin-blue.min.css')}">
  <link rel="stylesheet" href="${request.static_url('cuppy:static/fontawesome/css/font-awesome.min.css')}">
+ <link rel="stylesheet" href="${request.static_url('cuppy:static/views.css')}">
   <%block name="header_tags">
   </%block>
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -25,10 +26,8 @@
     <![endif]-->
   </head>
   <body class='hold-transition skin-blue'>
-    
-    ${api.render_template("cuppy:templates/components/navigation.mako", contents=api.navigation_documents)|n}
+  ${api.render_template("cuppy:templates/components/navigation.mako", contents=api.navigation_documents)|n}
     <div class="container">
-    
     ${api.render_template("cuppy:templates/components/breadcrumb.mako", breadcrumbs=api.breadcrumbs)|n}
     <div class="row">
       <div class="col-md-8 main">
@@ -44,7 +43,7 @@
       </div>
     </div>
     </div>
-    
+    <%include file="cuppy:templates/components/footer.mako"/>
    <script src="${request.static_url('cuppy:static/jquery/jquery.v3.3.1.min.js')}"></script>
 <script src="${request.static_url('cuppy:static/bootstrap/js/bootstrap.min.js')}"></script>
 <script src="${request.static_url('cuppy:static/adminlte/js/adminlte.min.js')}"></script>
