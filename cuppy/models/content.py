@@ -84,7 +84,10 @@ class SiteRoot(Base):
         return self.slug
 
     def generate_unique_slug(self, parent_id):
-        
+        if parent_id:
+            parent = SiteRoot.get_by_id(parent_id)
+            slug = parent.get_slug()
+            return title_to_slug(self.meta_title, self.keys(parent_id),slug)
         return title_to_slug(self.meta_title,self.keys(parent_id))
     
     def change_slug(self, slug):
@@ -244,14 +247,18 @@ class Document(Content):
         # to avoid throwing error if new slug is same as old slug
         available_slugs.pop(self.slug)
         
+        # New_slug must not have '/' character
+        new_slug = new_slug.split('/')[-1]
         # Check if new_slug exist
         if new_slug in available_slugs:
             raise ValueError("There's already a document with this slug, you can either change"  
             "the slug or change the parent of this document and try again")
+        
+        if self.parent:
+            new_slug = "%s/%s".format(self.parent.slug, new_slug)
         self.slug = new_slug
         
 
-    
     def set_parent(self, new_parent):
 
         "Changes the document parent and the slug if necessary"

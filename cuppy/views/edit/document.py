@@ -12,12 +12,12 @@ from cuppy.forms.content import AddDocument
 log = logging.getLogger(__name__)
 
 
-@view_config(route_name="dashboard", renderer="cuppy:templates/derived/dashboard/index.mako")
+@view_config(route_name="dashboard", renderer="cuppy:templates/derived/dashboard/index.mako", permission="add")
 def dashboard(request):
     
     return dict()
 
-@view_config(route_name="page", renderer="cuppy:templates/derived/dashboard/page.mako")
+@view_config(route_name="page", renderer="cuppy:templates/derived/dashboard/page.mako", permission="add")
 def page(request):
     """ This view lists all the pages/contents on the site"""
     
@@ -25,7 +25,7 @@ def page(request):
     return dict(docs = docs)
 
 
-@view_config(route_name="add_doc", renderer="cuppy:templates/derived/document/add.mako")
+@view_config(route_name="add_doc", renderer="cuppy:templates/derived/document/add.mako", permission="add")
 def add_doc(request):
     
     parent_id = request.matchdict['parent_id']
@@ -47,12 +47,9 @@ def add_doc(request):
     return dict(form=form, action_url= request.route_url('add_doc', parent_id=parent_id))
 
 
-@view_config(route_name="edit_doc", renderer="cuppy:templates/derived/document/edit.mako")
+@view_config(route_name="edit_doc", renderer="cuppy:templates/derived/document/edit.mako", permission="edit")
 def edit(request):
-    
-    slug = request.matchdict['slug']
-    slug = slug[-1]
-    doc = request.dbsession.query(Document).filter(Document.slug==slug).first()
+    doc = request.context.obj
     if not doc:
         return HTTPNotFound()
     form = AddDocument(request.POST, meta={'csrf_context':request.session}, obj=doc)
@@ -69,7 +66,7 @@ def edit(request):
         return HTTPFound(location = request.route_url('page'))
     return dict(form=form, action_url=request.route_url("edit_doc", slug=doc.get_slug()), doc=doc)
 
-@view_config(route_name="delete_doc")
+@view_config(route_name="delete_doc", permission='edit')
 def delete_doc(request):
     doc = request.context.obj
     if not doc:

@@ -8,7 +8,7 @@ import zope.sqlalchemy
 from .content import Content, Tag, Document  # flake8: noqa
 from .users import User, Groups, AuthUserLog, SiteActivity # flake8: noqa
 from .meta import DBSession, Base
-from .events import ObjectInsert, ObjectDelete, ObjectUpdate
+from .events import ObjectInsert, ObjectDelete, ObjectUpdate, UserInsert, UserDeleted, UserUpdate
 
 from cuppy.utils.util import get_settings
 # run configure_mappers after defining all of the models to ensure

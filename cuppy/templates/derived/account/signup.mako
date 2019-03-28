@@ -26,7 +26,7 @@
   <body class="hold-transition register-page">
 <div class="register-box">
   <div class="register-logo">
-    <a href=""><b>${api.page_title}</a>
+    <a href="/"><b>${api.page_title}</a>
   </div>
 
   <div class="register-box-body">
@@ -38,22 +38,36 @@
                 <div class="text-danger">You have submitted an invalid form</div>
             %endif
       <div class="form-group has-feedback">
+      <label>Firstname<span class="text-danger">*</span></label>
         %for error in form.first_name.errors:
             <div class="error">${error}</div>
             %endfor
+            
             ${form.first_name(class_='form-control required', placeholder="First name")}
                     
         <span class="glyphicon glyphicon-user form-control-feedback"></span>
       </div>
       <div class="form-group has-feedback">
+      <label>Lastname<span class="text-danger">*</span></label>
         %for error in form.last_name.errors:
             <div class="error">${error}</div>
             %endfor
+            
             ${form.last_name(class_='form-control required', placeholder="Last name")}
                     
         <span class="glyphicon glyphicon-user form-control-feedback"></span>
       </div>
+       <div class="form-group has-feedback">
+       <label>Email<span class="text-danger">*</span></label>
+        %for error in form.email.errors:
+            <div class="error">${error}</div>
+            %endfor
+            
+                ${form.email(class_='form-control required', placeholder="Email")}
+        <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+      </div>
       <div class="form-group has-feedback">
+      <label>Username</label>
         %for error in form.username.errors:
             <div class="error">${error}</div>
             %endfor
@@ -61,25 +75,23 @@
         <span class="glyphicon glyphicon-user form-control-feedback"></span>
         <small class="help-block"> Only use letters, numbers, dashes or underscores</small>
       </div>
-      <div class="form-group has-feedback">
-        %for error in form.email.errors:
-            <div class="error">${error}</div>
-            %endfor
-                ${form.email(class_='form-control required', placeholder="Email")}
-        <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
-      </div>
+     
     
       <div class="form-group has-feedback">
+      <label>Password<span class="text-danger">*</span></label>
         %for error in form.password.errors:
             <div class="error">${error}</div>
             %endfor
+            
                 ${form.password(class_='form-control required', placeholder="Password")}
         <span class="glyphicon glyphicon-lock form-control-feedback"></span>
       </div>
       <div class="form-group has-feedback">
+      <label>Repeat Password<span class="text-danger">*</span></label>
         %for error in form.confirm.errors:
             <div class="error">${error}</div>
             %endfor
+           
                 ${form.confirm(class_='form-control required', placeholder="Repeat Password")}
         <span class="glyphicon glyphicon-log-in form-control-feedback"></span>
       </div>

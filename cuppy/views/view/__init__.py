@@ -13,7 +13,7 @@ def includeme(config):
 
 def doc_factory(request):
     slug = request.matchdict['slug']
-    slug = slug[-1]
+    slug = '/'.join(slug)
     doc = Document.get_by_slug(slug)
     if doc is None:
         raise HTTPNotFound()

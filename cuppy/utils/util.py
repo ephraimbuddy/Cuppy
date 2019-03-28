@@ -81,14 +81,18 @@ def disambiguate_name(name):
     return '-'.join(parts)
 
 
-def title_to_slug(title, blacklist=(), max_length=200):
+def title_to_slug(title, blacklist=(),prepend=None, max_length=200):
 
     normalizer = cuppy_settings('url_normalizer')[0]
     name = normalizer(title, locale='en', max_length=max_length)
     if name not in blacklist:
+        if prepend:
+            return prepend+"/"+name
         return name
     while name in blacklist:
         name = disambiguate_name(name)
+    if prepend:
+        return prepend+"/"+name
     return name
 
 

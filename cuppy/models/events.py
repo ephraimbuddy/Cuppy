@@ -1,7 +1,10 @@
 from datetime import datetime
+from webhelpers2.text import remove_formatting, truncate
 from pyramid.events import subscriber
 
+from cuppy.models import User
 from cuppy.utils.util import title_to_slug
+from cuppy.utils.util import disambiguate_name
 
 import logging
 log = logging.getLogger(__name__)
@@ -27,9 +30,9 @@ class ObjectDelete(ObjectEvent):
 
 
 class UserEvent(object):
-    def __init__(self, request, obj):
+    def __init__(self, request, user):
         self.request = request
-        self.object = obj
+        self.user = user
 
 
 class UserInsert(UserEvent):
@@ -53,10 +56,8 @@ def set_creation_date(event):
     """
     log.debug("setting creation date")
     obj = event.object
-    if obj.creation_date is None:
-        obj.creation_date = obj.modification_date = datetime.now()
-    else:
-        obj.modification_date = obj.creation_date
+    obj.creation_date = obj.modification_date = datetime.now()
+    
 
 
 @subscriber(ObjectInsert)
@@ -73,12 +74,22 @@ def set_meta(event):
         obj.parent_id = parent_id
     if obj.meta_title is None:
         obj.meta_title = obj.title
-    #TODO: handle meta_description generation from content if it has attr body
+    if obj.description is None:
+        ends = ("</p>", "<br />", "<br/>", "<br>", "</ul>",
+                "\n", ". ", "! ", "? ")
+        for end in ends:
+            pos = obj.body.lower().find(end)
+            if pos >-1:
+                obj.description = remove_formatting(obj.body[:pos])
+        #else:
+          #  obj.description = remove_formatting(truncate(obj.body,200,indicator='',whole_word = True))
     if obj.slug is None:
         obj.slug = obj.generate_unique_slug(parent_id)
     else:
         # If we have slug, make it unique
-        obj.slug =title_to_slug(obj.slug, obj.keys(parent_id))
+        if obj.parent_id:
+           obj.slug =title_to_slug(obj.slug, obj.keys(parent_id), obj.parent.get_slug()) 
+        obj.slug =title_to_slug(obj.slug, obj.keys())
 
 
 @subscriber(ObjectInsert)
@@ -111,4 +122,21 @@ def set_modification_date(event):
 @subscriber(UserInsert)
 def set_username(event):
     """Generate unique username of the user if no username set in the form"""
-    
+    request = event.request
+    usernames = [i.username for i in request.dbsession.query(User).all()]
+    user = event.user
+    if user.username is None:
+        username = user.email.split('@')[0]
+        if username not in usernames:
+            user.username=username
+        else:
+            while username in usernames:
+                username = disambiguate_name(username)
+            user.username = username
+
+
+@subscriber(UserInsert)
+def set_join_date(event):
+    """Set the date the user registered on the site"""
+    user = event.user
+    user.join_date = datetime.now()

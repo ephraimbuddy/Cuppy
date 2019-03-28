@@ -18,14 +18,14 @@
     
       %for content in contents:
         %if not content.children:
-            <li class="${api.current_page(content) and 'active'}"><a href="${request.route_url('view_doc',slug=content.get_slug())}">${content.title}</a></li>
+            <li class="${api.current_page(content) and 'active'}"><a href="${request.route_url('view_doc',slug=content.slug)}">${content.title}</a></li>
         %else:
             <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">${content.title} <span class="caret"></span></a>
           <ul class="dropdown-menu">
             %for child in content.children:
             
-            <li class="${api.current_page(child) and 'active'}"><a href="${request.route_url('view_doc',slug=child.get_slug())}">${child.title}</a></li>
+            <li class="${api.current_page(child) and 'active'}"><a href="${request.route_url('view_doc',slug=child.slug)}">${child.title}</a></li>
             %endfor
           </ul>
         </li>

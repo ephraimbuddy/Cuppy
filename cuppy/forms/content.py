@@ -68,18 +68,16 @@ class ContentForm(BaseForm):
     slug = StringField("Slug", filters=[strip_filter], description="Leave blank to have the URL auto-generated from the title.")
 
     description = TextAreaField("Meta Description", filters=[strip_filter],
-                                description = "Leave blank to have the description auto-generated from the content.")
+                                description = "Leave blank to have the description auto-generated from the content. We recommend writing it for better SEO")
     
     # Content
     title = StringField("Title", validators=[validators.InputRequired(),
                                             validators.Length(min=3, max=200)],
                                  filters = [strip_filter])
-    creation_date = DateTimeField("Creation Date",
-                                description = "Leave blank to have the creation date auto-generated. format=> Y-m-d H:m:s")
 
     status = RadioField("Status", choices = [('draft', 'Draft'), ('published', 'Published')], default="published")
 
-    in_menu = BooleanField("In menu", default='checked')
+    in_menu = BooleanField("In menu")
     
     tags = BetterTagListField("Tags", description="Enter a comma separated list of tags")
     

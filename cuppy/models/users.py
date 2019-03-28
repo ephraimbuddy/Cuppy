@@ -50,7 +50,7 @@ class User(Base):
     first_name = Column(Unicode(50))
     last_name = Column(Unicode(50))
     about = Column(UnicodeText)
-    #joined_date = Column(DateTime, default = func.now())
+    joined_date = Column(DateTime, default = func.now())
     mygroups = relationship("Groups", secondary=user_group, back_populates="users")
     contents = relationship('Content', back_populates="user")
     user_log = relationship('AuthUserLog', back_populates='user', cascade='all, delete, delete-orphan')

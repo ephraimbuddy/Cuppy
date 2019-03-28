@@ -15,6 +15,7 @@ from cuppy.models import ObjectInsert
 from cuppy.models import ObjectUpdate
 from cuppy.models import ObjectDelete
 from cuppy.models import User
+from cuppy.models import UserInsert
 from cuppy.utils.util import generate_confirmation_token
 from cuppy.utils.util import confirm_token
 from cuppy.utils.util import cuppy_settings
@@ -22,13 +23,14 @@ from cuppy.utils.util import cuppy_remember
 from cuppy.mailing import welcome, email_forgot, user_regmail, confirm_email
 
 
-@view_config(route_name="list_group", renderer = "cuppy:templates/derived/group/list_group.mako")
+
+@view_config(route_name="list_group", renderer = "cuppy:templates/derived/group/list_group.mako", permission="manage")
 def groups(request):
     groups = request.dbsession.query(Groups).all()
     return dict(groups = groups)
 
 
-@view_config(route_name="add_group", renderer="cuppy:templates/derived/group/add.mako")
+@view_config(route_name="add_group", renderer="cuppy:templates/derived/group/add.mako", permission="manage")
 def addgroup(request):
     form = GroupForm(request.POST, meta={'csrf_context':request.session})
     if request.POST and form.validate():
@@ -40,7 +42,7 @@ def addgroup(request):
     return dict(form=form, action_url= request.route_url('add_group'))
 
 
-@view_config(route_name="edit_group", renderer="cuppy:templates/derived/group/edit.mako")
+@view_config(route_name="edit_group", renderer="cuppy:templates/derived/group/edit.mako", permission="manage_permissions")
 def editgroup(request):
     id_ = request.matchdict['id']
     group = request.dbsession.query(Groups).get(id_)
@@ -58,7 +60,7 @@ def editgroup(request):
     return dict(form=form, action_url= request.route_url('edit_group', id=id_), group=group)
 
 
-@view_config(route_name="delete_group")
+@view_config(route_name="delete_group", permission="manage_permissions")
 def delete_group(request):
     id_ = request.matchdict['id']
     group = request.dbsession.query(Groups).get(id_)
@@ -68,13 +70,13 @@ def delete_group(request):
     return HTTPFound(location=request.route_url('list_group'))
     
 
-@view_config(route_name="users", renderer="cuppy:templates/derived/account/users.mako")
+@view_config(route_name="users", renderer="cuppy:templates/derived/account/users.mako", permission="manage_permissions")
 def users(request):
     users = request.dbsession.query(User).all()
     return dict(users = users)
 
 
-@view_config(route_name='admin_edit_user', renderer = "cuppy:templates/derived/account/admin_edit_user.mako")
+@view_config(route_name='admin_edit_user', renderer = "cuppy:templates/derived/account/admin_edit_user.mako", permission='state_change')
 def admin_edit_users(request):
     id_ = request.matchdict['id']
     user = User.get_by_id(id_)
@@ -95,7 +97,7 @@ def admin_edit_users(request):
     return dict(user=user, form=form, groups=groups)
 
 
-@view_config(route_name="add_to_group")
+@view_config(route_name="add_to_group", permission="manage_permissions")
 def make_admin(request):
     id_ = request.matchdict['user_id']
     user = User.get_by_id(id_)
@@ -109,7 +111,7 @@ def make_admin(request):
     return HTTPFound(location=request.route_url('admin_edit_user', id=user.id))
 
 
-@view_config(route_name="remove_from_group")
+@view_config(route_name="remove_from_group", permission = "manage_permissions")
 def remove_from_group(request):
     id_ = request.matchdict['user_id']
     user = User.get_by_id(id_)
@@ -133,16 +135,19 @@ def reg(request):
         if email:
             request.session.flash("info; This email is already in use")
             return HTTPFound(location = request.route_url('home'))
-        username = User.get_by_username(form.username.data)
-        if username:
-            request.session.flash("info; This username is not available")
-            return HTTPFound(location = request.route_url('home'))
+        if form.username.data:
+            username = User.get_by_username(form.username.data)
+            if username:
+                request.session.flash("info; This username is not available")
+                return HTTPFound(location = request.route_url('home'))
         user = User(first_name=form.first_name.data,
                     email = form.email.data,
                     last_name = form.last_name.data,
                     username=form.username.data)
         user.set_password(form.password.data)
         request.dbsession.add(user)
+        event = UserInsert(request, user)
+        request.registry.notify(event)
         headers = cuppy_remember(request, user, event="R")
         if cuppy_settings("verify_email"):
             token = generate_confirmation_token(user.email)

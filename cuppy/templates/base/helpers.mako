@@ -61,7 +61,7 @@
             <button type="button" class="btn btn-sm btn-box-tool" ><i class="fa fa-bars"></i>
                 </button>
               <h3 class="box-title">
-              <a href="${request.route_url('edit_doc', slug=page.get_slug())}">${page.title}</a></h3>
+              <a href="${request.route_url('edit_doc', slug=page.slug)}">${page.title}</a></h3>
 
               <div class="box-tools pull-right">
               
