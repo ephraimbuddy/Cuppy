@@ -119,6 +119,7 @@ def remove_from_group(request):
     group = request.dbsession.query(Groups).filter(Groups.name==name).first()
     if user and group:
         if group in user.mygroups:
+            #TODO: ensure that this is not the last admin. Last admin permission shouldn't be removed
             user.mygroups.remove(group)
             request.session.flash('success; %s removed from group %s'%(user.fullname,group.name))
         return HTTPFound(location=request.route_url('admin_edit_user',id=user.id))

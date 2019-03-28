@@ -6,19 +6,28 @@ from pyramid.paster import bootstrap, setup_logging
 from sqlalchemy.exc import OperationalError
 
 from ..models.meta import Base
-
+from ..models import User, Groups
 log = logging.getLogger(__name__)
 
 
-def setup_models(dbsession):
+def setup_models(dbsession, request):
     """
     Add or update models / fixtures in the database.
 
-    TODO: Run fixtures and create admin user using config_uri
     """
-    pass
+    if dbsession.query(User).count()<1:
+        groups = ['superadmin', 'admin','owner','editor']
+        for i in groups:
+            g = Groups(i)
+            dbsession.add(g)
+        user = User(username=request.registry.settings['cuppy.admin_username'],
+                email=request.registry.settings['cuppy.admin_email'],
+                )
+        dbsession.add(user)
+        g = dbsession.query(Groups).filter_by(name='superadmin').first()
+        user.mygroups.append(g)
+        user.set_password(request.registry.settings['cuppy.admin_password'])
     
-
 
 def parse_args(argv):
     parser = argparse.ArgumentParser()
@@ -36,8 +45,10 @@ def main(argv=sys.argv):
 
     try:
         with env['request'].tm:
-            dbsession = env['request'].dbsession
-            setup_models(dbsession)
+            request = env['request']
+            dbsession = request.dbsession
+            setup_models(dbsession, request)
+
     except OperationalError:
         print('''
 Pyramid is having a problem using your SQL database.  The problem

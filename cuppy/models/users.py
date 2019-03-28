@@ -28,6 +28,10 @@ class Groups(Base):
 
     users = relationship('User', secondary=user_group,
                      back_populates='mygroups')
+    
+    def __init__(self, name, description=''):
+        self.name = name
+        self.description = description
 
     def __repr__(self):
         return u'%s' % self.name
