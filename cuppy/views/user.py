@@ -119,9 +119,21 @@ def remove_from_group(request):
     group = request.dbsession.query(Groups).filter(Groups.name==name).first()
     if user and group:
         if group in user.mygroups:
-            #TODO: ensure that this is not the last admin. Last admin permission shouldn't be removed
-            user.mygroups.remove(group)
-            request.session.flash('success; %s removed from group %s'%(user.fullname,group.name))
+            #Find users in the group superadmin
+            sadmin = request.dbsession.query(Groups).filter(Groups.name=='superadmin').first()
+            superadmins = sadmin.users
+            if group == sadmin:
+                if len(superadmins)>1:
+                    #Last admin should never be removed
+                    user.mygroups.remove(group)
+                    request.session.flash('success; %s removed from group %s'%(user.fullname,group.name))
+                    return HTTPFound(location=request.route_url('admin_edit_user',id=user.id))
+                request.session.flash('info; %s last admin cannot be removed from group %s'%(user.fullname,group.name))
+                return HTTPFound(location=request.route_url('admin_edit_user',id=user.id))
+            if group!=superadmins:
+                user.mygroups.remove(group)
+                request.session.flash('success; %s removed from group %s'%(user.fullname,group.name))
+                return HTTPFound(location=request.route_url('admin_edit_user',id=user.id))
         return HTTPFound(location=request.route_url('admin_edit_user',id=user.id))
     request.session.flash('danger; Not successfull')
     return HTTPFound(location=request.route_url('admin_edit_user', id=user.id))
