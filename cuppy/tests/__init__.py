@@ -11,26 +11,24 @@ def dummy_request(dbsession):
 
 class BaseTest(unittest.TestCase):
     def setUp(self):
+        from ..models.meta import Base, DBSession
+        from sqlalchemy import engine_from_config
+        from pyramid_beaker import session_factory_from_settings
+
         self.config = testing.setUp(settings={
             'sqlalchemy.url': 'sqlite:///:memory:'
         })
 
-        self.config.include('..models')
         self.config.include('..routes')
-        self.config.include('..views.document')
+        self.config.include('..views.view')
 
         settings = self.config.get_settings()
         
-        from ..models import (
-            get_engine,
-            get_session_factory,
-            get_tm_session,
-            )
-
-        self.engine = get_engine(settings)
-        session_factory = get_session_factory(self.engine)
-
-        self.session = get_tm_session(session_factory, transaction.manager)
+        self.engine = engine_from_config(settings, 'sqlalchemy.')
+        
+        session_factory = session_factory_from_settings(settings)
+        
+        self.session = DBSession
         
 
     def init_database(self):
