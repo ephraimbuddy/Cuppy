@@ -11,6 +11,7 @@ class TestDocumentViewSuccess(BaseTest):
         return DocumentView.doc_view(request)
     
     def test_view(self):
+        "Test the document view"
         from ..views.document import DocumentResource
 
         user = self.makeUser("myusername","email@example.com","John")
