@@ -4,6 +4,7 @@ from pyramid.renderers import render
 from cuppy.utils.util import get_settings
 from cuppy.models import Document
 
+
 def template_api(context, request, **kwargs):
     return get_settings()["cuppy.templates.api"][0](context, request, **kwargs)
 
@@ -15,6 +16,7 @@ def add_global_renderer(event):
         if api is None and request is not None:
             api = template_api(event["context"], event["request"])
         event["api"] = api
+
 
 class TemplateApi(object):
     
@@ -28,7 +30,17 @@ class TemplateApi(object):
         self.settings = get_settings()
         self.__dict__.update(kwargs)
 
-    
+
+    @reify
+    def edit_needed(self):
+        if "cuppy.fanstatic.edit_needed" in self.settings:
+            return [r.need() for r in self.settings["cuppy.fanstatic.edit_needed"]]
+
+    @reify
+    def view_needed(self):
+        if "cuppy.fanstatic.view_needed" in self.settings:
+            return [r.need() for r in self.settings["cuppy.fanstatic.view_needed"]]
+
     def __lineage__(self):
         try:
             context = self.context.obj

@@ -5,11 +5,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>${api.page_title}</title>
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-  <link rel="stylesheet" href="${request.static_url('cuppy:static/bootstrap/css/bootstrap.min.css')}">
-  <link rel="stylesheet" href="${request.static_url('cuppy:static/adminlte/css/AdminLTE.min.css')}">
-  <link rel="stylesheet" href="${request.static_url('cuppy:static/adminlte/css/skin-blue.min.css')}">
- <link rel="stylesheet" href="${request.static_url('cuppy:static/fontawesome/css/font-awesome.min.css')}">
- <link rel="stylesheet" href="${request.static_url('cuppy:static/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css')}">
+  
   <%block name="header_tags"></%block>
   <!-- Google Font -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
@@ -142,12 +138,7 @@
 </div>
 <!-- ./wrapper -->
 
-<script src="${request.static_url('cuppy:static/jquery/jquery.v3.3.1.min.js')}"></script>
-<script src="${request.static_url('cuppy:static/bootstrap/js/bootstrap.min.js')}"></script>
-<script src="${request.static_url('cuppy:static/adminlte/js/adminlte.min.js')}"></script>
-<script src="${request.static_url('cuppy:static/jquery/fastclick.js')}"></script>
-<script src="${request.static_url('cuppy:static/jquery/jquery.slimscroll.min.js')}"></script>
-<script src="${request.static_url('cuppy:static/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js')}"></script>
+<script>${api.edit_needed}</script>
 <%block name="bottom_tags">
 <script>
 $(document).ready(function() {

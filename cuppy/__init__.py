@@ -34,11 +34,10 @@ default_settings = {
         'cuppy.timezone':'Africa/Lagos',
         'cuppy.csrf_secret_key':b'\xb6\xb9\xdf\xb3\x85u$i<{\xe3^\xc3\xf3N\xab',
         'cuppy.csrf_time_limit':20,
+        #Here's for creating email hashes
         'cuppy.email_secret':"jkasdfg8349c4ewu7438fiu73",
         'cuppy.email_secret_password':'skdsidud782387dsdhjdsd7dsds',
         'cuppy.confirm_token_expiration':86400,
-        'cuppy.minified_css':True,
-        'cuppy.minified_js':True,
         'cuppy.includes': ' '.join(
                             ['cuppy.security',
                             'cuppy.routes',
@@ -47,13 +46,17 @@ default_settings = {
         ),
         
         'cuppy.templates.api':'cuppy.views.util.TemplateApi',
-        'cuppy.site_title':'Cuppy'
+        'cuppy.site_title':'Cuppy',
+        'cuppy.fanstatic.view_needed':"cuppy.fanstatic.view_needed",
+        'cuppy.fanstatic.edit_needed':'cuppy.fanstatic.edit_needed'
     }
 
 conf_dotted = {
     'cuppy.url_normalizer',
     'cuppy.includes',
-    'cuppy.templates.api'
+    'cuppy.templates.api',
+    'cuppy.fanstatic.view_needed',
+    'cuppy.fanstatic.edit_needed'
 }
 
 
