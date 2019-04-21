@@ -129,3 +129,7 @@ class TemplateApi(object):
             return True
         return False
     
+    @reify
+    def page_add_options(self):
+        if "cuppy.content_config.add_content_options" in self.settings:
+            return [i for i in self.settings['cuppy.content_config.add_content_options']]

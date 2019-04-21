@@ -14,28 +14,7 @@
       </ol>
       </section>
 </%block>
-<%block name="bottom_tags">
-${parent.bottom_tags}
-        <script>
-              jQuery(function($) {
-    $('.add_docs').change(function() {
-        var addUrl = this[this.selectedIndex].value;
-        //console.log(addUrl);
-        // If the browser's back button is hit from the add interface,
-        // the browser may maintain the state of the select list in the
-        // list interface, in which case the previously selected option
-        // will still be selected. This would mean the first option
-        // (eg "Add ..."") could be selected, which contains no URL to
-        // redirect to, so we guard against that, also set selectedIndex
-        // back to zero, to also protect against this scenario.
-        if (addUrl) {
-            location.href = addUrl;
-            this.selectedIndex = 0;
-        }
-    });
-});
-              </script>
-              </%block>
+
 <div class="row">
     <div class="col-lg-9 col-md-12">
 <div class="box box-primary">
@@ -45,7 +24,11 @@ ${parent.bottom_tags}
     <div class="pull-right">
     <select class="add_docs">
                 <option>Add ...</option>
-                <option value="${request.route_path('add_doc')}">Add page</option>
+                %for ilist in api.page_add_options:
+                    %for item in ilist:
+                <option value="${request.route_url(item[0])}">${item[1]}</option>
+                    %endfor
+                %endfor
                 </select>
                 </div>
     </div>

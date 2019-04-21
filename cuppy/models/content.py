@@ -275,7 +275,23 @@ class Document(Content):
             self.set_slug(self.slug)
         except ValueError:
             #We have to now generate a new slug
-            self.generate_unique_slug(self.parent_id)    
+            self.generate_unique_slug(self.parent_id)
+
+    @property
+    def add_route_name(self):
+        return "add_doc"
+    
+    @property
+    def edit_route_name(self):
+        return "edit_doc"
+    
+    @property
+    def delete_route_name(self):
+        return "delete_doc"
+
+    @property
+    def verbose_name(self):
+        return "Document"
 
 
 class File(Content):

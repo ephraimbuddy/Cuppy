@@ -38,6 +38,7 @@ default_settings = {
         'cuppy.email_secret':"jkasdfg8349c4ewu7438fiu73",
         'cuppy.email_secret_password':'skdsidud782387dsdhjdsd7dsds',
         'cuppy.confirm_token_expiration':86400,
+        'cuppy.extenders':" ",
         'cuppy.includes': ' '.join(
                             ['cuppy.security',
                             'cuppy.routes',
@@ -48,15 +49,18 @@ default_settings = {
         'cuppy.templates.api':'cuppy.views.util.TemplateApi',
         'cuppy.site_title':'Cuppy',
         'cuppy.fanstatic.view_needed':"cuppy.fanstatic.view_needed",
-        'cuppy.fanstatic.edit_needed':'cuppy.fanstatic.edit_needed'
+        'cuppy.fanstatic.edit_needed':'cuppy.fanstatic.edit_needed',
+        'cuppy.content_config.add_content_options':'cuppy.content_config.add_content_options'
     }
 
 conf_dotted = {
     'cuppy.url_normalizer',
+    'cuppy.extenders',
     'cuppy.includes',
     'cuppy.templates.api',
     'cuppy.fanstatic.view_needed',
-    'cuppy.fanstatic.edit_needed'
+    'cuppy.fanstatic.edit_needed',
+    'cuppy.content_config.add_content_options'
 }
 
 
@@ -86,6 +90,10 @@ def default_config(global_config, **settings):
             settings[key] = value.decode("utf8")
         if key == "cuppy.csrf_secret_key":
             settings[key] = str.encode(value)
+    # Allow extending packages to change 'settings' w/ Python: 
+    k = "cuppy.extenders"
+    for func in _resolve_dotted(settings, keys=(k,))[k]:
+        func(settings)
     
     settings = _resolve_dotted(settings)
     with Configurator(settings=settings) as config:

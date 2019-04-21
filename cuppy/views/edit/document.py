@@ -4,7 +4,7 @@ from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPFound
 from pyramid.httpexceptions import HTTPNotFound
 
-from cuppy.models import Document, ObjectInsert, ObjectUpdate, ObjectDelete, Tag, DBSession
+from cuppy.models import Content, Document, ObjectInsert, ObjectUpdate, ObjectDelete, Tag, DBSession
 from cuppy.utils.util import title_to_slug
 from cuppy.forms.content import AddDocument
 

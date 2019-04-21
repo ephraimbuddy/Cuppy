@@ -61,17 +61,17 @@
             <button type="button" class="btn btn-sm btn-box-tool" ><i class="fa fa-bars"></i>
                 </button>
               <h3 class="box-title">
-              <a href="${request.route_url('edit_doc', slug=page.slug)}">${page.title}</a></h3>
+              <a href="${request.route_url(page.edit_route_name, slug=page.slug)}">${page.title}</a></h3>
 
               <div class="box-tools pull-right">
               
               <select class="add_docs">
                 <option>Add ...</option>
-                <option value="${request.route_path('add_doc',parent_id=page.id)}">Add page</option>
+                <option value="${request.route_path(page.add_route_name,parent_id=page.id)}">Add ${page.verbose_name}</option>
                 </select>
                 <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                 </button>
-                <a href="#" onclick="$('#delete-modal a').attr('href', '${request.route_url('delete_doc', slug=page.slug)}');" data-toggle="modal" data-target="#delete-modal" class="btn btn-box-tool" ><i class="fa fa-trash"></i></a>
+                <a href="#" onclick="$('#delete-modal a').attr('href', '${request.route_url(page.delete_route_name, slug=page.slug)}');" data-toggle="modal" data-target="#delete-modal" class="btn btn-box-tool" ><i class="fa fa-trash"></i></a>
               </div>
               <!-- /.box-tools -->
             </div>
