@@ -10,7 +10,9 @@
     <meta name="description" content="${api.meta_description}">
     
     <title>${title or api.page_title} - ${api.site_title}</title>
-    <script>${api.view_needed}</script>
+    <%
+     needed_res = api.view_needed
+    %>
   <%block name="header_tags">
   </%block>
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->

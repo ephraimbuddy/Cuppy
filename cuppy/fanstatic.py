@@ -2,7 +2,8 @@ from fanstatic import Library, Resource, Group, Inclusion
 from js.jquery_form import jquery_form
 from cuppystatic import adminlte_skin_blue_css
 from cuppystatic import adminlte_js
-
+from cuppystatic import bootstrap_wysihtml5_css
+from cuppystatic import bootstrap_wysihtml5_js
 
 cuppylib = Library('cuppy','static')
 
@@ -35,4 +36,4 @@ edit_js = Resource(cuppylib,
                  bottom=True)
 
 view_needed=Group([views_css, views_js])
-edit_needed = Group([edit_css, edit_js])
+edit_needed = Group([edit_css, bootstrap_wysihtml5_css, bootstrap_wysihtml5_js, edit_js])

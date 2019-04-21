@@ -20,7 +20,7 @@
                 ${form.email(class_='form-control required', id="email", placeholder="Email")}
                 </div>
                 <div class="form-group">
-                <button type="submit" id="forgotBtn" class="btn btn-warning btn-block">Reset Password</button>
+                <button type="submit" id="forgotBtn" class="btn btn-warning btn-right">Reset Password</button>
                     </div>
             </form>
         </div>

@@ -36,6 +36,7 @@
     </ul>
     <ul class="nav navbar-nav navbar-right">
     %if request.user:
+    <li><a href="${request.route_url('dashboard')}" class="navbar-link">Dashboard</a></li>
     <li><a href="${request.route_url('signout')}" class="navbar-link">Signout</a></li>
     %else:
     <li><a href="${request.route_url('signin')}" class="navbar-link">Signin</a></li>

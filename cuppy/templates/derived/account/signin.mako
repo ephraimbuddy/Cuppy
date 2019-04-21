@@ -11,11 +11,9 @@
     
     <title>Signin - ${api.page_title}</title>
 
-  <link rel="stylesheet" href="${request.static_url('cuppy:static/bootstrap/css/bootstrap.min.css')}">
-  <link rel="stylesheet" href="${request.static_url('cuppy:static/adminlte/css/AdminLTE.min.css')}">
-  <link rel="stylesheet" href="${request.static_url('cuppy:static/adminlte/css/skin-blue.min.css')}">
- <link rel="stylesheet" href="${request.static_url('cuppy:static/fontawesome/css/font-awesome.min.css')}">
-  
+  <%
+     needed_res = api.view_needed
+    %>
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -70,10 +68,7 @@
   </div>
   <!-- /.login-box-body -->
 </div>
-<!-- /.login-box -->
-<script src="${request.static_url('cuppy:static/jquery/jquery.v3.3.1.min.js')}"></script>
-<script src="${request.static_url('cuppy:static/bootstrap/js/bootstrap.min.js')}"></script>
-<script src="${request.static_url('cuppy:static/adminlte/js/adminlte.min.js')}"></script>
+
 
   </body>
 </html>
